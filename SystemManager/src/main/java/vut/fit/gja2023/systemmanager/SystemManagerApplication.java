@@ -1,13 +1,13 @@
-package cz.vut.fit.gja_2023;
+package vut.fit.gja2023.systemmanager;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Gja2023Application {
+public class SystemManagerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Gja2023Application.class, args);
+        SpringApplication.run(SystemManagerApplication.class, args);
     }
 
 }
