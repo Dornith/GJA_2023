@@ -6,19 +6,21 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Java CI with Maven
+name: App Maven build
 
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'App/**'
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'App/**'
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 21
@@ -28,6 +30,4 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: |
-        mvn -B package --file ./App/pom.xml
-        mvn -B package --file ./SystemManager/pom.xml
+      run: mvn -B package --file ./App/pom.xml
