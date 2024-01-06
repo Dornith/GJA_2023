@@ -19,22 +19,22 @@ public class UserController {
 
     private final UserService userService;
 
-    @Operation(summary = "Add user to system", description = "If not found return 404")
+    @Operation(summary = "Add user to the system")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponse(responseCode = "200", description = "User added")
     @ApiResponse(responseCode = "401", description = "Unauthorized/Invalid Api Key")
     @ApiResponse(responseCode = "409", description = "User already exists")
-    @ApiResponse(responseCode = "500", description = "Unexpected error occured")
+    @ApiResponse(responseCode = "500", description = "Unexpected error occurred")
     public ResponseEntity<Void> createUser(@RequestBody String name) {
         return new ResponseEntity<>(userService.createUser(name));
     }
 
-    @Operation(summary = "Delete user from system", description = "If not found return 404")
+    @Operation(summary = "Delete user from the system")
     @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponse(responseCode = "200", description = "User deleted")
     @ApiResponse(responseCode = "401", description = "Unauthorized/Invalid Api Key")
     @ApiResponse(responseCode = "404", description = "User not found")
-    @ApiResponse(responseCode = "500", description = "Unexpected error occured")
+    @ApiResponse(responseCode = "500", description = "Unexpected error occurred")
     public ResponseEntity<Void> deleteUser(@RequestBody String name) {
         return new ResponseEntity<>(userService.deleteUser(name));
     }
