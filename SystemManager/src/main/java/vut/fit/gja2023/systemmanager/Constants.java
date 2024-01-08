@@ -12,6 +12,7 @@ public class Constants {
     public static final int GPASSWD_NOTFOUND_EXIT_CODE = 3;
     public static final int GETENT_NOTFOUND_EXIT_CODE = 2;
     public static final int USERADD_CONFLICT_EXIT_CODE = 9;
+    public static final int MKDIR_ERROR_EXIT_CODE = 1;
     public static final int GROUPADD_CONFLICT_EXIT_CODE = 9;
     public static final int SUCCESS_EXIT_CODE = 0;
 }
