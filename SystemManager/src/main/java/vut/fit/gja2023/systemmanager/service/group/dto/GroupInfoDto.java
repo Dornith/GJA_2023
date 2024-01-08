@@ -1,4 +1,4 @@
-package vut.fit.gja2023.systemmanager.service.dto;
+package vut.fit.gja2023.systemmanager.service.group.dto;
 
 import java.util.List;
 

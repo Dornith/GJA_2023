@@ -3,8 +3,10 @@ package vut.fit.gja2023.systemmanager.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import vut.fit.gja2023.systemmanager.service.GroupService;
-import vut.fit.gja2023.systemmanager.service.dto.GroupInfoDto;
-import vut.fit.gja2023.systemmanager.service.dto.RemoveUserFromGroupDto;
+import vut.fit.gja2023.systemmanager.service.dto.NameWrapperDto;
+import vut.fit.gja2023.systemmanager.service.group.GroupService;
+import vut.fit.gja2023.systemmanager.service.group.dto.AddUserToGroupDto;
+import vut.fit.gja2023.systemmanager.service.group.dto.GroupInfoDto;
+import vut.fit.gja2023.systemmanager.service.group.dto.RemoveUserFromGroupDto;
 
 import static vut.fit.gja2023.systemmanager.Constants.API_PREFIX;
 
@@ -28,7 +32,7 @@ public class GroupController {
 
     @Operation(summary = "Get group info")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiResponse(responseCode = "200", description = "Group and its users returned")
+    @ApiResponse(responseCode = "200", description = "Group info successfully retrieved")
     @ApiResponse(responseCode = "401", description = "Unauthorized/Invalid Api Key")
     @ApiResponse(responseCode = "404", description = "Group not found")
     @ApiResponse(responseCode = "500", description = "Unexpected server error occurred")
@@ -37,25 +41,25 @@ public class GroupController {
     }
 
     @Operation(summary = "Add group to the system")
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponse(responseCode = "200", description = "Group created")
     @ApiResponse(responseCode = "400", description = "Invalid request body")
     @ApiResponse(responseCode = "401", description = "Unauthorized/Invalid Api Key")
     @ApiResponse(responseCode = "409", description = "Group already exists")
     @ApiResponse(responseCode = "500", description = "Unexpected server error occurred")
-    public ResponseEntity<Void> createGroup(@RequestBody String name) {
-        return new ResponseEntity<>(groupService.createGroup(name));
+    public HttpStatus createGroup(@RequestBody @NonNull NameWrapperDto dto) { //TODO: maybe return group system ID?
+        return groupService.createGroup(dto);
     }
 
     @Operation(summary = "Delete group from the system")
-    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponse(responseCode = "200", description = "User deleted")
     @ApiResponse(responseCode = "400", description = "Invalid request body")
     @ApiResponse(responseCode = "401", description = "Unauthorized/Invalid Api Key")
     @ApiResponse(responseCode = "404", description = "Group not found")
     @ApiResponse(responseCode = "500", description = "Unexpected server error occurred")
-    public ResponseEntity<Void> deleteGroup(@RequestBody String name) {
-        return new ResponseEntity<>(groupService.deleteGroup(name));
+    public HttpStatus deleteGroup(@RequestBody @NonNull NameWrapperDto dto) {
+        return groupService.deleteGroup(dto);
     }
 
     @Operation(summary = "Add user to group")
@@ -65,8 +69,8 @@ public class GroupController {
     @ApiResponse(responseCode = "401", description = "Unauthorized/Invalid Api Key")
     @ApiResponse(responseCode = "404", description = "User or group not found")
     @ApiResponse(responseCode = "500", description = "Unexpected server error occurred")
-    public ResponseEntity<Void> addUserToGroup(@RequestBody RemoveUserFromGroupDto dto) {
-        return new ResponseEntity<>(groupService.addUserToGroup(dto));
+    public HttpStatus addUserToGroup(@RequestBody @NonNull AddUserToGroupDto dto) {
+        return groupService.addUserToGroup(dto);
     }
 
     @Operation(summary = "Remove user from group")
@@ -76,7 +80,7 @@ public class GroupController {
     @ApiResponse(responseCode = "401", description = "Unauthorized/Invalid Api Key")
     @ApiResponse(responseCode = "404", description = "User or group not found")
     @ApiResponse(responseCode = "500", description = "Unexpected server error occurred")
-    public ResponseEntity<Void> removeUserFromGroup(@RequestBody RemoveUserFromGroupDto dto) {
-        return new ResponseEntity<>(groupService.removeUserFromGroup(dto));
+    public HttpStatus removeUserFromGroup(@RequestBody @NonNull RemoveUserFromGroupDto dto) {
+        return groupService.removeUserFromGroup(dto);
     }
 }
