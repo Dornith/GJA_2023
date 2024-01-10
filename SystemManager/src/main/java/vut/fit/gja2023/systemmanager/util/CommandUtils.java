@@ -12,7 +12,11 @@ import vut.fit.gja2023.systemmanager.service.directory.enums.DirectoryModeEnum;
 import vut.fit.gja2023.systemmanager.service.group.dto.AddUserToGroupDto;
 import vut.fit.gja2023.systemmanager.service.group.dto.RemoveUserFromGroupDto;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import static vut.fit.gja2023.systemmanager.Constants.GETENT_NOTFOUND_EXIT_CODE;
 import static vut.fit.gja2023.systemmanager.Constants.GPASSWD_NOTFOUND_EXIT_CODE;
@@ -27,6 +31,8 @@ import static vut.fit.gja2023.systemmanager.Constants.USERDEL_NOTFOUND_EXIT_CODE
 @UtilityClass
 public class CommandUtils {
 
+
+    public static final String ETC_HOSTS_ALLOW = "/etc/hosts.allow";
 
     /**
      * Get information about group
@@ -367,6 +373,56 @@ public class CommandUtils {
         if (checkSuccess(builder)) {
             return ExitCodeEnum.SUCCESS;
         } else {
+            return ExitCodeEnum.ERROR;
+        }
+    }
+
+    public static ExitCodeEnum createHostsFileRule(@NonNull String IPAddress) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(ETC_HOSTS_ALLOW, true))) {
+            writer.println("sshd: " + IPAddress + "# " + "Created by system manager");
+            return ExitCodeEnum.SUCCESS;
+        } catch (IOException e) {
+            log.error("Error adding rule to " + ETC_HOSTS_ALLOW, e);
+            return ExitCodeEnum.ERROR;
+        }
+    }
+
+    public static ExitCodeEnum removeHostsFileRule(@NonNull String IPAddress) {
+        boolean found = false;
+        try (BufferedReader reader = new BufferedReader(new FileReader(ETC_HOSTS_ALLOW));
+             PrintWriter writer = new PrintWriter(new FileWriter(ETC_HOSTS_ALLOW + ".tmp"))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.trim().equals("sshd: " + IPAddress + "# " + "Created by system manager")) {
+                    found = true;
+                    continue;
+                }
+                writer.println(line);
+            }
+            writer.flush();
+
+        } catch (IOException e) {
+            return ExitCodeEnum.ERROR;
+        }
+        if (!found) {
+            return ExitCodeEnum.NOT_FOUND;
+        }
+
+        // Replace the original file with the hosts.allow file with the specified rule removed
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder("mv", ETC_HOSTS_ALLOW + ".tmp", ETC_HOSTS_ALLOW);
+            Process process = processBuilder.start();
+            process.waitFor();
+
+            int exitCode = process.exitValue();
+            if (exitCode == 0) {
+                return ExitCodeEnum.SUCCESS;
+            } else {
+                return ExitCodeEnum.ERROR;
+            }
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
             return ExitCodeEnum.ERROR;
         }
     }
