@@ -13,16 +13,15 @@ public class ProjectBo {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "submitted", nullable = true)
-    private Date submitted;
+    @Column(name = "submitted_date", nullable = false)
+    private Date submittedDate;
+
+    @Column(name = "submitted", nullable = false)
+    private boolean isSubmitted;
 
     @ManyToOne
     private ProjectAssignmentBo assignment;
 
     @ManyToOne
     private TeamBo team;
-
-    public boolean isSubmitted() {
-        return submitted != null;
-    }
 }

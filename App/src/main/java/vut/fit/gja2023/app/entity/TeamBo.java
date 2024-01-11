@@ -32,6 +32,6 @@ public class TeamBo {
     @ManyToOne
     private CourseBo course;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany(mappedBy = "team", cascade = CascadeType.REMOVE)
     private List<ProjectBo> projects;
 }

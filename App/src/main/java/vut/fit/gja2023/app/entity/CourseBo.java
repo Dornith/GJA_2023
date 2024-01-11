@@ -20,10 +20,10 @@ public class CourseBo {
     @Column(name = "name", nullable = false, length = NAME_MAX_LENGTH)
     private String name;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
     private List<TeamBo> teams;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.REMOVE)
     private List<ProjectAssignmentBo> projectAssignments;
 
     @ManyToMany(mappedBy = "courses")

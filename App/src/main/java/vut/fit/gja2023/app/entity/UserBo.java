@@ -27,19 +27,19 @@ public class UserBo {
     @ManyToMany
     @JoinTable(
         name = "user_team",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "team_id")
+        joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id")
     )
     private List<TeamBo> teams;
 
     @ManyToMany
     @JoinTable(
         name = "user_course",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "course_id")
+        joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id")
     )
     private List<CourseBo> courses;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
     private List<FirewallRuleBo> firewallRules;
 }
