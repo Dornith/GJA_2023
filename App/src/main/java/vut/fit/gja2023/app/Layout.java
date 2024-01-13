@@ -1,7 +1,17 @@
 package vut.fit.gja2023.app;
 
-public class Layout {
-    public static final String VIEW = "targetView";
+public enum Layout {
+    DEFAULT("layouts/layout"),
+    EMPTY("layouts/empty");
 
-    public static final String DEFAULT_LAYOUT = "layouts/layout";
+    public final String value;
+
+    private Layout(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }
