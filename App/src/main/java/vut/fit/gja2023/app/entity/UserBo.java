@@ -10,7 +10,9 @@ import java.util.List;
 
 @Entity
 @Data
-@Table(name = "user")
+@Table(name = "user", indexes = {
+    @Index(name = "idx_login", columnList = "login")
+})
 public class UserBo {
     public static final int NAME_MAX_LENGTH = 30;
     public static final String LOGIN_REGEX = "^x[a-z]{5}\\d{2}$";
@@ -24,7 +26,7 @@ public class UserBo {
     private String name;
 
     @Pattern(regexp = LOGIN_REGEX, message = "Invalid login format")
-    @Column(name = "login", nullable = false, length = 8)
+    @Column(name = "login", nullable = false, unique = false, length = 8) //unique = true throws exception
     private String login;
 
     @Column(name = "role", nullable = false)

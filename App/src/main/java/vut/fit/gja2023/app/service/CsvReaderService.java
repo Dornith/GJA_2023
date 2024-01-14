@@ -5,8 +5,8 @@ import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
-import java.io.FileReader;
-import java.io.IOException;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +19,15 @@ import vut.fit.gja2023.app.validator.CsvValidator;
 public class CsvReaderService {
     
     private final CsvValidator validator;
-    
+
     public List<String[]> readCsv(String filePath, CsvReaderConfig config) throws IOException, IllegalArgumentException, IndexOutOfBoundsException, CsvException {
+        return readCsv(new FileInputStream(filePath), config);
+    }
+
+    public List<String[]> readCsv(InputStream stream, CsvReaderConfig config) throws IOException, IllegalArgumentException, IndexOutOfBoundsException, CsvException {
         CSVParser parser = new CSVParserBuilder().withSeparator(config.getSeparator()).build();
         
-        try (CSVReader reader = new CSVReaderBuilder(new FileReader(filePath))
+        try (CSVReader reader = new CSVReaderBuilder(new InputStreamReader(stream))
                 .withCSVParser(parser)
                 .build()) {
             

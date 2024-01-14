@@ -9,6 +9,7 @@ import vut.fit.gja2023.app.enums.UserRole;
 import vut.fit.gja2023.app.repository.CourseRepository;
 import vut.fit.gja2023.app.repository.UserRepository;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -26,24 +27,24 @@ public class DatabaseSeeder implements CommandLineRunner {
         var kenobi = new UserBo();
         kenobi.setName("Obi-Wan Kenobi");
         kenobi.setLogin("xkenob01");
-        kenobi.setRole(UserRole.Teacher);
+        kenobi.setRole(UserRole.TEACHER);
 
         var vader = new UserBo();
         vader.setName("Darth Vader");
         vader.setLogin("xvader01");
-        vader.setRole(UserRole.Teacher);
+        vader.setRole(UserRole.TEACHER);
 
         var yoda = new UserBo();
         yoda.setName("Yoda");
         yoda.setLogin("xyodaa01");
-        yoda.setRole(UserRole.Teacher);
+        yoda.setRole(UserRole.TEACHER);
 
         userRepository.save(kenobi);
         userRepository.save(vader);
         userRepository.save(yoda);
 
         var breathing = new CourseBo();
-        breathing.setName("Introduction to breathing");
+        breathing.setName("Introduction to Breathing");
         breathing.setGuarantor(vader);
         breathing.setCoordinator(vader);
 
@@ -51,16 +52,20 @@ public class DatabaseSeeder implements CommandLineRunner {
         highGround.setName("High Ground Fundamentals");
         highGround.setGuarantor(kenobi);
         highGround.setCoordinator(kenobi);
-        highGround.setStudents(Arrays.asList(vader));
 
         var lang = new CourseBo();
         lang.setName("Backwards Language Understanding");
         lang.setGuarantor(yoda);
         lang.setCoordinator(yoda);
-        lang.setStudents(Arrays.asList(kenobi, vader));
 
         courseRepository.save(breathing);
         courseRepository.save(highGround);
         courseRepository.save(lang);
+
+        kenobi.setStudiedCourses(List.of(lang));
+        userRepository.save(kenobi);
+
+        vader.setStudiedCourses(Arrays.asList(lang, highGround));
+        userRepository.save(vader);
     }
 }

@@ -10,6 +10,8 @@ import vut.fit.gja2023.app.View;
 import vut.fit.gja2023.app.models.CsvColumn;
 import vut.fit.gja2023.app.repository.CourseRepository;
 import vut.fit.gja2023.app.service.CourseService;
+import vut.fit.gja2023.app.service.StudentCsvParser;
+import vut.fit.gja2023.app.util.CsvReaderConfig;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.List;
 public class CourseController {
     private final CourseRepository courseRepository;
     private final CourseService courseService;
+    private final StudentCsvParser csvParser;
 
     private static final String LOGIN_COLUMN_ORDER = "csv-login";
     private static final String NAME_COLUMN_ORDER = "csv-name";
@@ -30,7 +33,7 @@ public class CourseController {
     );
 
     @GetMapping
-    public String courses(Model model) {
+    public String getCourses(Model model) {
         //TODO: get only courses of logged user
         var courses = courseRepository.findAll();
         model.addAttribute("courses", courses);
@@ -39,7 +42,7 @@ public class CourseController {
     }
 
     @GetMapping("/{courseId}")
-    public String course(Model model, @PathVariable long courseId) {
+    public String getCourse(Model model, @PathVariable long courseId) {
         var course = courseRepository.findById(courseId);
         if (course.isEmpty()) {
             model.setErrorView("404", "Course doesn't exist.");
@@ -51,8 +54,21 @@ public class CourseController {
         return Layout.DEFAULT.toString();
     }
 
+    @GetMapping("/{courseId}/students")
+    public String getStudents(Model model, @PathVariable long courseId) {
+        var course = courseRepository.findById(courseId);
+        if (course.isEmpty()) {
+            model.setErrorView("404", "Course doesn't exist.");
+            return Layout.DEFAULT.toString();
+        }
+
+        model.addAttribute("course", course.get());
+        model.setTargetView(View.COURSE_STUDENTS);
+        return Layout.DEFAULT.toString();
+    }
+
     @GetMapping("/{courseId}/students/upload")
-    public String upload(Model model, @PathVariable long courseId) {
+    public String uploadStudents(Model model, @PathVariable long courseId) {
         var course = courseRepository.findById(courseId);
         if (course.isEmpty()) {
             model.setErrorView("404", "Course doesn't exist.");
@@ -66,11 +82,12 @@ public class CourseController {
     }
 
     @PostMapping("/{courseId}/students/upload")
-    public String upload(
+    public String uploadStudents(
         Model model,
         @PathVariable long courseId,
-        @RequestParam("csv-file") MultipartFile csv,
+        @RequestParam("csv-file") MultipartFile csvFile,
         @RequestParam("csv-separator") String separator,
+        @RequestParam("csv-has-header") boolean hasHeader,
         @RequestParam(LOGIN_COLUMN_ORDER) int login,
         @RequestParam(NAME_COLUMN_ORDER) int name
     ) {
@@ -80,15 +97,15 @@ public class CourseController {
             return Layout.DEFAULT.toString();
         }
 
-        if (csv.isEmpty() || separator.length() != 1) {
+        if (csvFile.isEmpty() || separator.length() != 1) {
             model.setErrorView("401", "Bad request.");
             return Layout.DEFAULT.toString();
         }
 
-        //TODO:
-        // - parse csv
-        // - courseService.upsertStudents(parsedStudents);
+        var config = new CsvReaderConfig(new int[]{ login - 1, name - 1 }, hasHeader, separator.charAt(0));
+        var students = csvParser.parse(csvFile, config);
+        courseService.upsertStudents(course.get(), students);
 
-        return "redirect:/courses/" + courseId;
+        return "redirect:/courses/" + courseId + "/students";
     }
 }
