@@ -1,5 +1,7 @@
 package vut.fit.gja2023.app.service;
 
+import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vut.fit.gja2023.app.entity.UserBo;
@@ -13,14 +15,22 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserBo saveUser(String name) {
+    @Transactional
+    public UserBo saveUser(String name, String login) {
         UserBo user = new UserBo();
         user.setName(name);
+        user.setLogin(login);
         return userRepository.save(user);
     }
 
-    public UserBo getUser(String name) {
-        Optional<UserBo> queryResult = userRepository.findByUserName(name);
+    @Transactional
+    public List<UserBo> getUsersByName(String name) {
+        return userRepository.findByUserName(name);
+    }
+    
+    @Transactional
+    public UserBo getUserByLogin(String login) {
+        Optional<UserBo> queryResult = userRepository.findByUserLogin(login);
         return queryResult.orElse(null);
     }
 }
