@@ -101,6 +101,16 @@
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
 		</dependency>
+                <dependency>
+                        <groupId>com.opencsv</groupId>
+                        <artifactId>opencsv</artifactId>
+                        <version>5.6</version>
+                </dependency>
+                <dependency>
+                        <groupId>org.junit.jupiter</groupId>
+                        <artifactId>junit-jupiter-api</artifactId>
+                        <scope>test</scope>
+                </dependency>
 		<dependency>
 			<groupId>systems.manifold</groupId>
 			<artifactId>manifold-ext-rt</artifactId>
