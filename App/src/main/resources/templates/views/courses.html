@@ -1,0 +1,7 @@
+<main class="p-2">
+    <h2>Courses</h2>
+    <div th:each="course : ${courses}" class="p-1">
+        <a th:href="@{'/courses/' + ${course.id}}" th:text="${course.name}"></a> by
+        <span th:text="${course.guarantor.name}"></span>
+    </div>
+</main>
