@@ -34,4 +34,8 @@ public class UserService {
         Optional<UserBo> queryResult = userRepository.findByUserLogin(login);
         return queryResult.orElse(null);
     }
+
+    public void removeStudent(UserBo student) {
+
+    }
 }
