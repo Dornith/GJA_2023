@@ -13,9 +13,12 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>App</name>
 	<description>App</description>
+
 	<properties>
 		<java.version>21</java.version>
+		<manifold.version>2024.1.1</manifold.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -73,7 +76,6 @@
 			<artifactId>hibernate-community-dialects</artifactId>
 			<version>6.1.7.Final</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -99,6 +101,11 @@
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>systems.manifold</groupId>
+			<artifactId>manifold-ext-rt</artifactId>
+			<version>${manifold.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -113,6 +120,33 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<source>11</source>
+					<target>11</target>
+					<encoding>UTF-8</encoding>
+					<compilerArgs>
+						<!-- Configure manifold plugin-->
+						<arg>-Xplugin:Manifold</arg>
+					</compilerArgs>
+					<!-- Add the processor path for the plugin -->
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+						<path>
+							<groupId>systems.manifold</groupId>
+							<artifactId>manifold-ext</artifactId>
+							<version>${manifold.version}</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head">
+</head>
+<body class="d-flex flex-row">
+    <aside th:replace="fragments/sidebar::#sidebar"></aside>
+    <main th:replace="${targetView}::main"></main>
+</body>
+</html>
