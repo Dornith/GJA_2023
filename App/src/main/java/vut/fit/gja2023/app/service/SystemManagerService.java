@@ -39,7 +39,6 @@ public class SystemManagerService {
         return restTemplate.exchange(SYSTEM_MANAGER_USER_URL, HttpMethod.DELETE, request, HttpStatus.class);
     }
 
-
     // Methods to handle Groups
     public ResponseEntity<GroupInfoDto> getGroupInfo(String groupName){
         return restTemplate.getForEntity(SYSTEM_MANAGER_GROUP_URL + "?group=" + groupName, GroupInfoDto.class);
@@ -54,7 +53,6 @@ public class SystemManagerService {
         return restTemplate.exchange(SYSTEM_MANAGER_GROUP_URL, HttpMethod.DELETE, request, HttpStatus.class);
     }
 
-
     public ResponseEntity<HttpStatus> addUserToGroup(String userName, String groupName){
         HttpEntity<AddUserToGroupDto> request = new HttpEntity<>(new AddUserToGroupDto(userName, groupName));
         return restTemplate.exchange(SYSTEM_MANAGER_GROUP_URL + "/user", HttpMethod.PUT, request, HttpStatus.class);
@@ -66,7 +64,6 @@ public class SystemManagerService {
     }
 
     // Methods to handle Directories
-
     public ResponseEntity<HttpStatus> createDirectory(String path, DirectoryModeEnum mode, String ownerGroupName){
         return restTemplate.postForEntity(SYSTEM_MANAGER_DIRECTORY_URL, new CreateDirectoryDto(path, mode, ownerGroupName), HttpStatus.class);
     }
@@ -81,9 +78,7 @@ public class SystemManagerService {
         return restTemplate.exchange(SYSTEM_MANAGER_DIRECTORY_URL, HttpMethod.PUT, request, HttpStatus.class);
     }
 
-
     // Methods to handle Firewall
-
     public ResponseEntity<HttpStatus> createFirewallRule(String ipAddress){
         return restTemplate.postForEntity(SYSTEM_MANAGER_FIREWALL_URL, new FirewallRuleDto(ipAddress), HttpStatus.class);
     }
@@ -93,5 +88,4 @@ public class SystemManagerService {
         return restTemplate.exchange(SYSTEM_MANAGER_FIREWALL_URL, HttpMethod.DELETE, request, HttpStatus.class);
     }
 
-    
 }

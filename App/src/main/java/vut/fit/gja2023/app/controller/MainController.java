@@ -10,12 +10,7 @@ import vut.fit.gja2023.app.service.SystemManagerService;
 @RequiredArgsConstructor
 public class MainController {
 
-    SystemManagerService systemManagerService;
-
-    @Autowired
-    public MainController(SystemManagerService systemManagerService) {
-        this.systemManagerService = systemManagerService;
-    }
+    private final SystemManagerService systemManagerService;
 
     @RequestMapping("/")
     public String index() {
