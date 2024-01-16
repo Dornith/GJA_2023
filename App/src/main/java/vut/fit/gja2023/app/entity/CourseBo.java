@@ -11,6 +11,7 @@ import java.util.List;
 @Table(name = "course")
 public class CourseBo {
     public static final int NAME_MAX_LENGTH = 30;
+    public static final int ABBREVIATION_MAX_LENGTH = 5;
 
     @Id
     @GeneratedValue
@@ -19,6 +20,10 @@ public class CourseBo {
     @Size(max = NAME_MAX_LENGTH)
     @Column(name = "name", nullable = false, length = NAME_MAX_LENGTH)
     private String name;
+
+    @Size(max = ABBREVIATION_MAX_LENGTH)
+    @Column(name = "abbreviation", nullable = false, length = ABBREVIATION_MAX_LENGTH)
+    private String abb;
 
     @ManyToOne
     private UserBo guarantor;

@@ -12,11 +12,16 @@ import java.util.List;
 @Table(name = "project_assignment")
 public class ProjectAssignmentBo {
     public static final int TITLE_MAX_LENGTH = 30;
+    public static final int NAME_MAX_LENGTH = 30;
     public static final int DESCRIPTION_MAX_LENGTH = 100;
 
     @Id
     @GeneratedValue
     private Long id;
+
+    @Size(max = NAME_MAX_LENGTH)
+    @Column(name = "name", nullable = false, length = NAME_MAX_LENGTH)
+    private String name;
 
     @Size(max = TITLE_MAX_LENGTH)
     @Column(name = "title", nullable = false, length = TITLE_MAX_LENGTH)
@@ -25,6 +30,9 @@ public class ProjectAssignmentBo {
     @Size(max = DESCRIPTION_MAX_LENGTH)
     @Column(name = "description", nullable = false, length = DESCRIPTION_MAX_LENGTH)
     private String description;
+
+    @Column(name = "team", nullable = false)
+    private boolean isTeam;
 
     @Column(name = "deadline", nullable = false)
     private Date deadline;

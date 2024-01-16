@@ -48,6 +48,9 @@ public class UserBo {
     )
     private List<CourseBo> studiedCourses;
 
+    @OneToMany(mappedBy = "author", cascade = CascadeType.REMOVE)
+    private List<ProjectBo> projects;
+
     @OneToMany(mappedBy = "guarantor", cascade = CascadeType.REMOVE)
     private List<CourseBo> guaranteedCourses;
 
