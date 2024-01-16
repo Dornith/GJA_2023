@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vut.fit.gja2023.app.entity.CourseBo;
@@ -49,7 +51,7 @@ public class UserService {
      * @apiNote Assumes that that student is not in any courses (nor have any projects) !!!
      * @param student student which will be removed from the system.
      */
-    public void deleteStudent(UserBo student) {
+    public void deleteStudent(@NotNull UserBo student) {
         //delete teams that contains only this student
         student.getTeams().stream()
             .filter(team -> team.getMembers().size() == 1)
@@ -63,7 +65,7 @@ public class UserService {
         userRepository.delete(student);
     }
 
-    public UserBo generateUser(String login, String name, UserRole role) {
+    public UserBo generateUser(@NotNull String login, @NotNull String name, @NotNull UserRole role) {
         var user = new UserBo();
         user.setLogin(login);
         user.setName(name);
@@ -73,6 +75,7 @@ public class UserService {
         user.setGuaranteedCourses(new ArrayList<>());
         user.setFirewallRules(new ArrayList<>());
         user.setProjects(new ArrayList<>());
+        userRepository.save(user);
 
         var password = "alohomora";
         //TODO

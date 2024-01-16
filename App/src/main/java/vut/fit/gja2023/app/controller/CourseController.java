@@ -1,6 +1,7 @@
 package vut.fit.gja2023.app.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +43,7 @@ public class CourseController {
         return Layout.DEFAULT.toString();
     }
 
-    @GetMapping(path = {"/{courseId}", "/{courseId}/assignments/create"})
+    @GetMapping("/{courseId}")
     public String getCourse(Model model, @PathVariable long courseId) {
         var course = courseRepository.findById(courseId);
         if (course.isEmpty()) {
@@ -128,7 +129,7 @@ public class CourseController {
         Model model,
         @PathVariable long courseId,
         @RequestParam("ass-title") String title,
-        @RequestParam("ass-deadline") Date deadline,
+        @RequestParam("ass-deadline") @DateTimeFormat(pattern = "yyyy-MM-dd") Date deadline,
         @RequestParam("ass-desc") String description,
         @RequestParam("ass-team") boolean isTeam
     ) {

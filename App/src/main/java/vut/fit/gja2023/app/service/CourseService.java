@@ -44,10 +44,15 @@ public class CourseService {
         systemAdapter.createCourse(course);
     }
 
-    @Transactional
     public void upsertStudents(@NotNull CourseBo course, @NotNull List<UserBo> newStudents) {
+        var logins = newStudents.stream().map(UserBo::getLogin).toList();
+        var existingStudents = userRepository.findAllByLogins(logins);
+        var courseStudents = course.getStudents();
+
         for (var newStudent : newStudents) {
-            var existingStudentResult = userRepository.findByUserLogin(newStudent.getLogin());
+            var existingStudentResult = existingStudents.stream()
+                .filter(student -> newStudent.getLogin().matches(student.getLogin()))
+                .findFirst();
 
             //student already exists
             if (existingStudentResult.isPresent()) {
@@ -60,31 +65,29 @@ public class CourseService {
                 }
             } else {
                 //student has to be created
-                var generatedUser = userService.generateUser(newStudent.getLogin(), newStudent.getName(), UserRole.STUDENT);
-                addStudentToCourse(course, generatedUser);
+                var generatedStudent = userService.generateUser(newStudent.getLogin(), newStudent.getName(), UserRole.STUDENT);
+                addStudentToCourse(course, generatedStudent);
             }
         }
 
         //students that don't attend the course anymore
-        course.getStudents().stream()
+        courseStudents.stream()
             .filter(isNotIn(newStudents))
             .forEach(student -> removeStudentFromCourse(course, student));
-
-        courseRepository.save(course);
     }
 
     private static Predicate<UserBo> isNotIn(List<UserBo> users) {
         return uA -> users.stream().noneMatch(uB -> uB.getLogin().equals(uA.getLogin()));
     }
 
-    @Transactional
-    public void removeStudentFromCourse(@NotNull CourseBo course, @NotNull UserBo student) {
+    private void removeStudentFromCourse(@NotNull CourseBo course, @NotNull UserBo student) {
         student.getStudiedCourses().remove(course);
 
         //remove one man projects to this course
-        student.getProjects().stream()
+        var toRemove = student.getProjects().stream()
             .filter(project -> project.getAssignment().getCourse().getId().equals(course.getId()))
-            .forEach(projectService::removeProject);
+            .peek(projectService::removeProject).toList();
+        student.getProjects().removeIf(toRemove::contains);
 
         //remove student from teams in this course
         student.getTeams().stream()
@@ -98,19 +101,16 @@ public class CourseService {
         }
     }
 
-    @Transactional
     public void addStudentToCourse(@NotNull CourseBo course, @NotNull UserBo student) {
         student.getStudiedCourses().add(course);
+        userRepository.save(student);
 
         //create projects for each non-team assignment
         course.getProjectAssignments().stream()
             .filter(assignment -> !assignment.isTeam())
-            .forEach(assignment -> student.getProjects().add(projectService.createProject(student, assignment)));
-
-        userRepository.save(student);
+            .forEach(assignment -> projectService.createProject(student, assignment));
     }
 
-    @Transactional
     public void addAssignmentToCourse(
         @NotNull CourseBo course,
         @NotNull String title,
@@ -129,18 +129,18 @@ public class CourseService {
         course.getProjectAssignments().add(assignment);
         courseRepository.save(course);
 
+        systemAdapter.createAssignment(assignment);
+
         if (course.getStudents().isEmpty()) {
             return;
         }
 
-        systemAdapter.createAssignment(assignment);
-
         if (isTeam) {
-            //create project for each student
-            course.getStudents().forEach(student -> projectService.createProject(student, assignment));
-        } else {
             //create project for each team
             course.getTeams().forEach(team -> projectService.createTeamProject(team, assignment));
+        } else {
+            //create project for each student
+            course.getStudents().forEach(student -> projectService.createProject(student, assignment));
         }
     }
 }

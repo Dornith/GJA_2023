@@ -23,6 +23,7 @@
         <div th:text="${ass.title}"></div>
         <div th:text="${ass.description}"></div>
         <div th:text="${ass.deadline}"></div>
-        <div th:text="${ass.isteam}"></div>
+        <div th:text="${ass.team}"></div>
+        <a class="btn btn-danger" th:href="@{'/courses/' + ${course.id} + '/assignments/delete'}">Delete</a>
     </div>
 </main>

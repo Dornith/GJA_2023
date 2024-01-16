@@ -13,6 +13,7 @@ import vut.fit.gja2023.app.repository.ProjectRepository;
 import vut.fit.gja2023.app.repository.UserRepository;
 import vut.fit.gja2023.app.service.CourseService;
 import vut.fit.gja2023.app.service.SystemAdapter;
+import vut.fit.gja2023.app.service.UserService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,7 +24,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class DatabaseSeeder implements CommandLineRunner {
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final CourseService courseService;
 
     @Override
@@ -32,25 +33,14 @@ public class DatabaseSeeder implements CommandLineRunner {
     }
 
     private void seedCourses() {
-        var kenobi = new UserBo();
-        kenobi.setName("Obi-Wan Kenobi");
-        kenobi.setLogin("xkenob01");
-        kenobi.setRole(UserRole.TEACHER);
-
-        var vader = new UserBo();
-        vader.setName("Darth Vader");
-        vader.setLogin("xvader01");
-        vader.setRole(UserRole.TEACHER);
-
-        var yoda = new UserBo();
-        yoda.setName("Yoda");
-        yoda.setLogin("xyodaa01");
-        yoda.setRole(UserRole.TEACHER);
-
-        userRepository.saveAll(Arrays.asList(kenobi, vader, yoda));
+        /*
+        var kenobi = userService.generateUser("xkenob01", "Obi-Wan Kenobi", UserRole.TEACHER);
+        var vader = userService.generateUser("xvader01", "Darth Vader", UserRole.TEACHER);
+        var yoda = userService.generateUser("xyodaa01", "Yoda", UserRole.TEACHER);
 
         courseService.createCourse("Introduction to Breathing", "I2B", vader, vader);
         courseService.createCourse("High Ground Fundamentals", "HGF", kenobi, kenobi);
         courseService.createCourse("Backwards Language Understanding","BLU", yoda, yoda);
+        */
     }
 }

@@ -14,7 +14,7 @@ public class ErrorController {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleException(Exception ex, Model model) {
-        model.setErrorView("404", ex.getMessage());
+        model.setErrorView("404", ex.getMessage() + "\n" + ex.getStackTrace().toString());
         return Layout.EMPTY.toString();
     }
 }

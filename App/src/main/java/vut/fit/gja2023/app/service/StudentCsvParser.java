@@ -1,6 +1,7 @@
 package vut.fit.gja2023.app.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import vut.fit.gja2023.app.entity.UserBo;
@@ -9,6 +10,7 @@ import vut.fit.gja2023.app.util.CsvReaderConfig;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StudentCsvParser {
@@ -26,6 +28,7 @@ public class StudentCsvParser {
                 return student;
             }).toList();
         } catch (Exception ex) {
+            log.error("Error occurred when parsing CSV.", ex);
             return List.of();
         }
     }
