@@ -12,10 +12,18 @@ import vut.fit.gja2023.systemmanager.service.dto.NameWrapperDto;
 import vut.fit.gja2023.systemmanager.service.user.dto.CreateUserDto;
 import vut.fit.gja2023.systemmanager.util.CommandUtils;
 
+/**
+ * A service for manipulating users in the system.
+ */
 @Service
 public class UserService {
 
-
+    /**
+     * Checks whether a user already exists in the system.
+     * 
+     * @param name A user's name.
+     * @return HTTP response containing true, if a user with given name already exists, false otherwise
+     */
     public HttpStatus existsUser(String name) {
         if (StringUtils.isEmpty(name)) {
             throw new UserNotFoundException(name);
@@ -27,32 +35,54 @@ public class UserService {
         }
     }
 
+    /**
+     * Creates a user in the system.
+     * 
+     * @param dto Contains the user's login and password.
+     * @return HTTP status indicating success or containig a problem that ocurred.
+     */
     public HttpStatus createUser(CreateUserDto dto) {
         if (StringUtils.isEmpty(dto.name())) {
             throw new BaseBadRequestException("User name cannot be empty");
         }
         ExitCodeEnum exitCode = CommandUtils.createNewUser(dto.name(), dto.password());
-        if (exitCode == ExitCodeEnum.SUCCESS) {
-            return HttpStatus.OK;
-        } else if (exitCode == ExitCodeEnum.CONFLICT) {
-            throw new UserAlreadyExistsException(dto.name());
-        } else {
+        if (null == exitCode) {
             throw new BaseServerErrorException();
 
+        } else {
+            switch (exitCode) {
+                case SUCCESS:
+                    return HttpStatus.OK;
+                case CONFLICT:
+                    throw new UserAlreadyExistsException(dto.name());
+                default:
+                    throw new BaseServerErrorException();
+            }
         }
     }
 
+    /**
+     * Deletes the user with a specified login from the system.
+     * 
+     * @param dto Contains the login of a user.
+     * @return HTTP status indicating success or containig a problem that ocurred.
+     */
     public HttpStatus deleteUser(NameWrapperDto dto) {
         if (StringUtils.isEmpty(dto.name())) {
             throw new BaseBadRequestException("User name cannot be empty");
         }
         ExitCodeEnum exitCode = CommandUtils.deleteUser(dto.name());
-        if (exitCode == ExitCodeEnum.SUCCESS) {
-            return HttpStatus.OK;
-        } else if (exitCode == ExitCodeEnum.NOT_FOUND) {
-            throw new UserNotFoundException(dto.name());
-        } else {
+        if (null == exitCode) {
             throw new BaseServerErrorException();
+        } else {
+            switch (exitCode) {
+                case SUCCESS:
+                    return HttpStatus.OK;
+                case NOT_FOUND:
+                    throw new UserNotFoundException(dto.name());
+                default:
+                    throw new BaseServerErrorException();
+            }
         }
     }
 }

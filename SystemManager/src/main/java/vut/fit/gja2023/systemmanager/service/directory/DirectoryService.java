@@ -19,6 +19,9 @@ import vut.fit.gja2023.systemmanager.util.CommandUtils;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * A service for manipulating the directory structure of an OS.
+ */
 @Slf4j
 @Service
 public class DirectoryService {
@@ -31,48 +34,81 @@ public class DirectoryService {
      * Can also specify privileges for the directory
      * If the path is empty, the directory will be created in the base path
      *
-     * @param dto contains path, mode and ownerGroupName to be used in creating new directory
-     * @return
-     * @return
+     * @param dto Contains path, mode and ownerGroupName to be used in creating new directory.
+     * @return HTTP status indicating success or containig a problem that ocurred.
      */
     public HttpStatus createDirectory(CreateDirectoryDto dto) {
         String processedPath = processPath(dto.path());
         ExitCodeEnum exitCode = CommandUtils.createNewDirectory(processedPath, dto.mode(), dto.ownerGroupName());
-        if (exitCode == ExitCodeEnum.SUCCESS) {
-            return HttpStatus.OK;
-        } else if (exitCode == ExitCodeEnum.NOT_FOUND) {
-            throw new BaseBadRequestException("Path not found");
-        } else if (exitCode == ExitCodeEnum.CONFLICT) {
-            throw new FileAlreadyExistsException(dto.path());
-        } else {
+        if (null == exitCode) {
             throw new BaseServerErrorException();
+        } else {
+            switch (exitCode) {
+                case SUCCESS:
+                    return HttpStatus.OK;
+                case NOT_FOUND:
+                    throw new BaseBadRequestException("Path not found");
+                case CONFLICT:
+                    throw new FileAlreadyExistsException(dto.path());
+                default:
+                    throw new BaseServerErrorException();
+            }
         }
     }
 
+    /**
+     * Deletes a specified directory.
+     * 
+     * @param dto Contains the path of a directory.
+     * @return HTTP status indicating success or containig a problem that ocurred.
+     */
     public HttpStatus deleteDirectory(DeleteDirectoryDto dto) {
         String processedPath = processPath(dto.path());
         ExitCodeEnum exitCode = CommandUtils.deleteDirectory(processedPath);
-        if (exitCode == ExitCodeEnum.SUCCESS) {
-            return HttpStatus.OK;
-        } else if (exitCode == ExitCodeEnum.NOT_FOUND) {
-            throw new DirectoryNotFoundException(dto.path());
-        } else {
+        if (null == exitCode) {
             throw new BaseServerErrorException();
+        } else {
+            switch (exitCode) {
+                case SUCCESS:
+                    return HttpStatus.OK;
+                case NOT_FOUND:
+                    throw new DirectoryNotFoundException(dto.path());
+                default:
+                    throw new BaseServerErrorException();
+            }
         }
     }
 
+    /**
+     * Changes which group does a specified directory belong to.
+     * 
+     * @param dto Contains the path of a directory and the name of a new owner group.
+     * @return HTTP status indicating success or containig a problem that ocurred.
+     */
     public HttpStatus modifyDirectoryGroup(ModifyDirectoryGroupDto dto) {
         String processedPath = processPath(dto.path());
         ExitCodeEnum exitCode = CommandUtils.changeDirGroup(processedPath, dto.groupName());
-        if (exitCode == ExitCodeEnum.SUCCESS) {
-            return HttpStatus.OK;
-        } else if (exitCode == ExitCodeEnum.NOT_FOUND) {
-            throw new DirectoryNotFoundException(processedPath);
-        } else {
+        if (null == exitCode) {
             throw new BaseServerErrorException();
+        }
+        else {
+            switch (exitCode) {
+                case SUCCESS:
+                    return HttpStatus.OK;
+                case NOT_FOUND:
+                    throw new DirectoryNotFoundException(processedPath);
+                default:
+                    throw new BaseServerErrorException();
+            }
         }
     }
 
+    /**
+     * Converts a given director path to a normalized directory path.
+     * 
+     * @param path A directory path.
+     * @return A normalized directory path.
+     */
     private String processPath(String path) {
         if (!StringUtils.isEmpty(path)) {
             Path normalizedPath = Paths.get(BASE_PATH, path).normalize();

@@ -15,7 +15,9 @@ import vut.fit.gja2023.app.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * A service for working with users.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -26,6 +28,13 @@ public class UserService {
     private final SystemAdapter systemAdapter;
     private final SystemManagerService systemManager;
 
+    /**
+     * Saves a new user to the database.
+     * 
+     * @param name The name of the user.
+     * @param login The unique login of the user.
+     * @return A business object representing the user.
+     */
     @Transactional
     public UserBo saveUser(String name, String login) {
         UserBo user = new UserBo();
@@ -34,11 +43,21 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    /**
+     * Retrieves users with a specified name from the database.
+     * @param name The name of the users.
+     * @return A list of bussines objects representing users.
+     */
     @Transactional
     public List<UserBo> getUsersByName(String name) {
         return userRepository.findByUserName(name);
     }
     
+    /**
+     * Retrieves a user with a specified login from the database.
+     * @param login The user's login.
+     * @return A bussines object representing the user.
+     */
     @Transactional
     public UserBo getUserByLogin(String login) {
         Optional<UserBo> queryResult = userRepository.findByUserLogin(login);

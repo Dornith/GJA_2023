@@ -9,6 +9,9 @@ import vut.fit.gja2023.app.entity.TeamBo;
 
 import java.util.Optional;
 
+/**
+ * A repository used for saving/retrieving courses from the database.
+ */
 @Repository
 public interface CourseRepository extends JpaRepository<CourseBo, Long> {
     @Query("SELECT c FROM CourseBo c WHERE c.name = :courseName")

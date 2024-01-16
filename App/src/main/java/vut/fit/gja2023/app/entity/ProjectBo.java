@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * A business object representing a project.
+ */
 @Entity
 @Data
 @Table(name = "project")

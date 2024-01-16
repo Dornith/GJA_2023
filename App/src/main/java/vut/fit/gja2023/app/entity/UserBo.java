@@ -8,6 +8,9 @@ import vut.fit.gja2023.app.enums.UserRole;
 
 import java.util.List;
 
+/**
+ * A business object representing a user.
+ */
 @Entity
 @Data
 @Table(name = "user", indexes = {

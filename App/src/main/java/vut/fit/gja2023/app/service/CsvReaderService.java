@@ -14,12 +14,27 @@ import org.springframework.stereotype.Service;
 import vut.fit.gja2023.app.util.CsvReaderConfig;
 import vut.fit.gja2023.app.validator.CsvValidator;
 
+
+/**
+ * A service for reading csv files.
+ */
 @Service
 @RequiredArgsConstructor
 public class CsvReaderService {
     
     private final CsvValidator validator;
 
+    /**
+     * Reads a csv file and returns entries read.
+     * 
+     * @param filePath The path of the csv file.
+     * @param config Reader configuration @see CsvReaderConfig.
+     * @return A list of lines from the file split by a specified separator.
+     * @throws IOException If no file on the specified path exists.
+     * @throws IllegalArgumentException If values in the config are invalid or null.
+     * @throws IndexOutOfBoundsException If values in the column order from config contain indexes for which there are no columns in the csv file.
+     * @throws CsvException If there is a problem while reading the file.
+     */
     public List<String[]> readCsv(String filePath, CsvReaderConfig config) throws IOException, IllegalArgumentException, IndexOutOfBoundsException, CsvException {
         return readCsv(new FileInputStream(filePath), config);
     }
