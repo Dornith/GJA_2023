@@ -1,0 +1,14 @@
+<main class="p-2">
+    <h2 th:text="${course.name}"></h2>
+    <div>
+        <a class="btn btn-warning" th:href="@{'/courses/' + ${course.id} + '/students/upload'}">Upload Students</a>
+        <a class="btn btn-secondary" th:href="@{'/courses/' + ${course.id}}">Back to Course Detail</a>
+        <a class="btn btn-secondary" href="/courses">Back to Courses</a>
+    </div>
+
+    <h4>Students</h4>
+    <div th:each="student : ${course.students}" class="p-1">
+        <span th:text="${student.login}"></span>
+        <span th:text="${student.name}"></span>
+    </div>
+</main>

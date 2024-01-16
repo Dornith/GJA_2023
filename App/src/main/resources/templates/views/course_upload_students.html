@@ -1,0 +1,10 @@
+<main class="p-2">
+    <h2 th:text="${course.name}"></h2>
+    <h4>Upload students</h4>
+    <form th:action="@{'/courses/' + ${course.id} + '/students/upload'}" method="post" enctype="multipart/form-data">
+        <div th:replace="fragments/csv_picker::div"></div>
+        <input type="submit" value="Upload" class="btn btn-warning">
+        <a class="btn btn-secondary" th:href="@{'/courses/' + ${course.id}}">Back to Course Detail</a>
+        <a class="btn btn-secondary" href="/courses">Back to Courses</a>
+    </form>
+</main>

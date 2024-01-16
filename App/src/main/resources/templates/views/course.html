@@ -1,0 +1,29 @@
+<main class="p-2">
+    <h2 th:text="${course.name}"></h2>
+    <div class="p-1">
+        <div>
+            <span>Guarantor: </span>
+            <span th:text="${course.guarantor.name}"></span>
+        </div>
+        <div>
+            <span>Coordinator: </span>
+            <span th:text="${course.coordinator.name}"></span>
+        </div>
+    </div>
+
+    <div class="p-1">
+        <a class="btn btn-primary" th:href="@{'/courses/' + ${course.id} + '/assignments/create'}">Add Assignment</a>
+        <a class="btn btn-primary" th:href="@{'/courses/' + ${course.id} + '/students'}">Students</a>
+        <a class="btn btn-warning" th:href="@{'/courses/' + ${course.id} + '/students/upload'}">Upload Students</a>
+        <a class="btn btn-secondary" href="/courses">Back to Courses</a>
+    </div>
+
+    <h4>Assignments</h4>
+    <div th:each="ass : ${course.projectAssignments}" class="p-1">
+        <div th:text="${ass.title}"></div>
+        <div th:text="${ass.description}"></div>
+        <div th:text="${ass.deadline}"></div>
+        <div th:text="${ass.team}"></div>
+        <a class="btn btn-danger" th:href="@{'/courses/' + ${course.id} + '/assignments/delete'}">Delete</a>
+    </div>
+</main>

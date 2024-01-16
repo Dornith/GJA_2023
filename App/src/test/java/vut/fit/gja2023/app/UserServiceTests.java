@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import vut.fit.gja2023.app.service.SystemAdapter;
+import vut.fit.gja2023.app.service.SystemManagerService;
+import vut.fit.gja2023.app.service.TeamService;
 import vut.fit.gja2023.app.service.UserService;
 import vut.fit.gja2023.app.entity.UserBo;
 import org.junit.jupiter.api.TestInstance;
@@ -30,7 +33,12 @@ public class UserServiceTests {
     @BeforeAll
     void setup() {
         userRepository = mock(UserRepository.class);
-        userService = new UserService(userRepository);
+        userService = new UserService(
+            mock(TeamService.class),
+            userRepository,
+            mock(SystemAdapter.class),
+            mock(SystemManagerService.class)
+        );
         
         userOne = new UserBo();
         userOne.setName(USERS_NAME);

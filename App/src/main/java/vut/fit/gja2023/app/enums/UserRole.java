@@ -1,8 +1,7 @@
 package vut.fit.gja2023.app.enums;
 
-public enum Role {
+public enum UserRole {
     STUDENT,
-    COORDINATOR,
-    GUARANTOR,
+    TEACHER,
     ADMIN
 }

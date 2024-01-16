@@ -4,15 +4,16 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vut.fit.gja2023.app.entity.TeamBo;
+import vut.fit.gja2023.app.entity.UserBo;
 import vut.fit.gja2023.app.repository.TeamRepository;
+import vut.fit.gja2023.app.util.OSNameParser;
 
 @Service
 @RequiredArgsConstructor
 public class TeamService {
-
-    private static final String REGEX_FORBIDDEN_SYMBOLS = "[^a-zA-Z\\d]";
-    
     private final TeamRepository teamRepository;
+    private final SystemAdapter systemAdapter;
+    private final SystemManagerService systemManager;
 
     @Transactional
     public TeamBo saveTeam(String name) {
@@ -29,9 +30,22 @@ public class TeamService {
     }
     
     private String convertNameToGroupId(String name) {
-        String newName = name.replaceAll(REGEX_FORBIDDEN_SYMBOLS, "");
-        String uid = java.util.UUID.randomUUID().toString();
+        return OSNameParser.toOS(name);
+    }
 
-        return newName + uid;
+    public void deleteTeam(TeamBo team) {
+        systemAdapter.deleteTeam(team);
+        teamRepository.delete(team);
+    }
+
+    public void removeStudentFromTeam(TeamBo team, UserBo student) {
+        team.getMembers().remove(student);
+
+        if (team.getMembers().isEmpty()) {
+            deleteTeam(team);
+        } else {
+            teamRepository.save(team);
+            systemManager.removeUserFromGroup(student.getLogin(), team.getGroupName());
+        }
     }
 }

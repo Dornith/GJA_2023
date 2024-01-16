@@ -24,4 +24,7 @@ public class ProjectBo {
 
     @ManyToOne
     private TeamBo team;
+
+    @ManyToOne
+    private UserBo author;
 }

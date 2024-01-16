@@ -3,6 +3,8 @@ package vut.fit.gja2023.app;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import vut.fit.gja2023.app.entity.TeamBo;
+import vut.fit.gja2023.app.service.SystemAdapter;
+import vut.fit.gja2023.app.service.SystemManagerService;
 import vut.fit.gja2023.app.service.TeamService;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -26,7 +28,7 @@ public class TeamServiceTests {
     @BeforeAll
     void setup() {
         teamRepository = mock(TeamRepository.class);
-        teamService = new TeamService(teamRepository);
+        teamService = new TeamService(teamRepository, mock(SystemAdapter.class), mock(SystemManagerService.class));
         
         teamWithName = new TeamBo();
         teamWithName.setName(TEAM_NAME);
