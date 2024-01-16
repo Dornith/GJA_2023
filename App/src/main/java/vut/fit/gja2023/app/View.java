@@ -6,7 +6,8 @@ public enum View {
     COURSE("views/course"),
     COURSES("views/courses"),
     UPLOAD_STUDENTS("views/course_upload_students"),
-    COURSE_STUDENTS("views/course_students");
+    COURSE_STUDENTS("views/course_students"),
+    CREATE_ASSIGNMENT("views/course_create_assignment");
 
     public final String value;
 

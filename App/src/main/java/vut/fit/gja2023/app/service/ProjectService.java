@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vut.fit.gja2023.app.entity.ProjectAssignmentBo;
 import vut.fit.gja2023.app.entity.ProjectBo;
+import vut.fit.gja2023.app.entity.TeamBo;
 import vut.fit.gja2023.app.entity.UserBo;
 import vut.fit.gja2023.app.repository.ProjectRepository;
 
@@ -21,6 +22,17 @@ public class ProjectService {
         project.setAuthor(student);
 
         systemAdapter.createProject(project);
+        projectRepository.save(project);
+        return project;
+    }
+
+    @Transactional
+    public ProjectBo createTeamProject(TeamBo team, ProjectAssignmentBo assignment) {
+        var project = new ProjectBo();
+        project.setAssignment(assignment);
+        project.setTeam(team);
+
+        systemAdapter.createTeamProject(project);
         projectRepository.save(project);
         return project;
     }

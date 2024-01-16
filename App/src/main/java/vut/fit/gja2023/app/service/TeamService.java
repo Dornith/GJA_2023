@@ -6,13 +6,11 @@ import org.springframework.stereotype.Service;
 import vut.fit.gja2023.app.entity.TeamBo;
 import vut.fit.gja2023.app.entity.UserBo;
 import vut.fit.gja2023.app.repository.TeamRepository;
+import vut.fit.gja2023.app.util.OSNameParser;
 
 @Service
 @RequiredArgsConstructor
 public class TeamService {
-
-    private static final String REGEX_FORBIDDEN_SYMBOLS = "[^a-zA-Z\\d]";
-    
     private final TeamRepository teamRepository;
     private final SystemAdapter systemAdapter;
     private final SystemManagerService systemManager;
@@ -32,10 +30,7 @@ public class TeamService {
     }
     
     private String convertNameToGroupId(String name) {
-        String newName = name.replaceAll(REGEX_FORBIDDEN_SYMBOLS, "");
-        String uid = java.util.UUID.randomUUID().toString();
-
-        return newName + uid;
+        return OSNameParser.toOS(name);
     }
 
     public void deleteTeam(TeamBo team) {

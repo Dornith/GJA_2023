@@ -14,6 +14,7 @@ import vut.fit.gja2023.app.service.StudentCsvParser;
 import vut.fit.gja2023.app.util.CsvReaderConfig;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -41,7 +42,7 @@ public class CourseController {
         return Layout.DEFAULT.toString();
     }
 
-    @GetMapping("/{courseId}")
+    @GetMapping(path = {"/{courseId}", "/{courseId}/assignments/create"})
     public String getCourse(Model model, @PathVariable long courseId) {
         var course = courseRepository.findById(courseId);
         if (course.isEmpty()) {
@@ -107,5 +108,37 @@ public class CourseController {
         courseService.upsertStudents(course.get(), students);
 
         return "redirect:/courses/" + courseId + "/students";
+    }
+
+    @GetMapping("/{courseId}/assignments/create")
+    public String createAssignment(Model model, @PathVariable long courseId) {
+        var course = courseRepository.findById(courseId);
+        if (course.isEmpty()) {
+            model.setErrorView("404", "Course doesn't exist.");
+            return Layout.DEFAULT.toString();
+        }
+
+        model.addAttribute("course", course.get());
+        model.setTargetView(View.CREATE_ASSIGNMENT);
+        return Layout.DEFAULT.toString();
+    }
+
+    @PostMapping("/{courseId}/assignments/create")
+    public String createAssignment(
+        Model model,
+        @PathVariable long courseId,
+        @RequestParam("ass-title") String title,
+        @RequestParam("ass-deadline") Date deadline,
+        @RequestParam("ass-desc") String description,
+        @RequestParam("ass-team") boolean isTeam
+    ) {
+        var course = courseRepository.findById(courseId);
+        if (course.isEmpty()) {
+            model.setErrorView("404", "Course doesn't exist.");
+            return Layout.DEFAULT.toString();
+        }
+
+        courseService.addAssignmentToCourse(course.get(), title, description, deadline, isTeam);
+        return "redirect:/courses/" + courseId;
     }
 }

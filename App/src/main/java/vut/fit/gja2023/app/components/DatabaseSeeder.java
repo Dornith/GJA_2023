@@ -11,6 +11,7 @@ import vut.fit.gja2023.app.repository.CourseRepository;
 import vut.fit.gja2023.app.repository.ProjectAssignmentRepository;
 import vut.fit.gja2023.app.repository.ProjectRepository;
 import vut.fit.gja2023.app.repository.UserRepository;
+import vut.fit.gja2023.app.service.CourseService;
 import vut.fit.gja2023.app.service.SystemAdapter;
 
 import java.time.LocalDate;
@@ -22,9 +23,8 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class DatabaseSeeder implements CommandLineRunner {
-    private final CourseRepository courseRepository;
     private final UserRepository userRepository;
-    private final ProjectAssignmentRepository projectAssignmentRepository;
+    private final CourseService courseService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -49,34 +49,8 @@ public class DatabaseSeeder implements CommandLineRunner {
 
         userRepository.saveAll(Arrays.asList(kenobi, vader, yoda));
 
-        var breathing = new CourseBo();
-        breathing.setName("Introduction to Breathing");
-        breathing.setAbb("I2B");
-        breathing.setGuarantor(vader);
-        breathing.setCoordinator(vader);
-
-        var highGround = new CourseBo();
-        highGround.setName("High Ground Fundamentals");
-        highGround.setAbb("HGF");
-        highGround.setGuarantor(kenobi);
-        highGround.setCoordinator(kenobi);
-
-        var lang = new CourseBo();
-        lang.setName("Backwards Language Understanding");
-        lang.setAbb("BLU");
-        lang.setGuarantor(yoda);
-        lang.setCoordinator(yoda);
-
-        courseRepository.saveAll(Arrays.asList(breathing, highGround, lang));
-
-        var assignment = new ProjectAssignmentBo();
-        assignment.setCourse(highGround);
-        assignment.setName("ABS");
-        assignment.setTitle("Dealing in Absolutes");
-        assignment.setDescription("");
-        assignment.setDeadline(new Date());
-        assignment.setTeam(true);
-
-        projectAssignmentRepository.save(assignment);
+        courseService.createCourse("Introduction to Breathing", "I2B", vader, vader);
+        courseService.createCourse("High Ground Fundamentals", "HGF", kenobi, kenobi);
+        courseService.createCourse("Backwards Language Understanding","BLU", yoda, yoda);
     }
 }

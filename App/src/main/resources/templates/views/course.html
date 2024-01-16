@@ -18,5 +18,11 @@
         <a class="btn btn-secondary" href="/courses">Back to Courses</a>
     </div>
 
-    <!-- TODO: list of assignments -->
+    <h4>Assignments</h4>
+    <div th:each="ass : ${course.projectAssignments}" class="p-1">
+        <div th:text="${ass.title}"></div>
+        <div th:text="${ass.description}"></div>
+        <div th:text="${ass.deadline}"></div>
+        <div th:text="${ass.isteam}"></div>
+    </div>
 </main>

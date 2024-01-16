@@ -26,7 +26,7 @@ public class UserBo {
     private String name;
 
     @Pattern(regexp = LOGIN_REGEX, message = "Invalid login format")
-    @Column(name = "login", nullable = false, unique = false, length = 8) //unique = true throws exception
+    @Column(name = "login", nullable = false, length = 8)
     private String login;
 
     @Column(name = "role", nullable = false)

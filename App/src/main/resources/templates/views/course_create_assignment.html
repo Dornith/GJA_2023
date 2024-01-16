@@ -1,0 +1,32 @@
+<main class="p-2">
+  <h2 th:text="${course.name}"></h2>
+  <h4>Create assignment</h4>
+  <form th:action="@{'/courses/' + ${course.id} + '/assignments/create'}" method="post">
+    <div class="input-group m-1">
+      <label class="input-group-text w-25" for="ass-title">Title</label>
+      <input class="form-control" type="text" id="ass-title" name="ass-title" required>
+    </div>
+
+    <div class="input-group m-1">
+      <label class="input-group-text w-25" for="ass-desc">Description</label>
+      <textarea class="form-control" id="ass-desc" name="ass-desc" rows="3" required></textarea>
+    </div>
+
+    <div class="input-group m-1">
+      <label for="ass-deadline">Deadline:</label>
+      <input type="date" id="ass-deadline" name="ass-deadline" />
+    </div>
+
+    <div class="input-group m-1">
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="ass-team" name="ass-team">
+        <input type="hidden" name="ass-team" value="false">
+        <label class="form-check-label" for="ass-team">Is team projects</label>
+      </div>
+    </div>
+
+    <input type="submit" value="Upload" class="btn btn-warning">
+    <a class="btn btn-secondary" th:href="@{'/courses/' + ${course.id}}">Back to Course Detail</a>
+    <a class="btn btn-secondary" href="/courses">Back to Courses</a>
+  </form>
+</main>
