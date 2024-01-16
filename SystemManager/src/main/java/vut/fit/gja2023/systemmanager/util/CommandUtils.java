@@ -300,6 +300,7 @@ public class CommandUtils {
         }
         ProcessBuilder builder = new ProcessBuilder();
         builder.command("mkdir");
+        builder.command().add("-p");
         builder.command().add("-m");
         if (mode != null) {
             builder.command().add(mode.getMode());
