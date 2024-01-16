@@ -14,11 +14,20 @@ import vut.fit.gja2023.systemmanager.util.CommandUtils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * A service used for manipulating firewall.
+ */
 @Service
 public class FirewallService {
 
     private static final String IP_REGEX = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)\\.?\\b){4}$";
 
+    /**
+     * Creates a firewall rule allowing a specified IP address to enter the system.
+     * 
+     * @param dto Contains an IP address.
+     * @return HTTP status indicating success or containig a problem that ocurred.
+     */
     public HttpStatus createFirewallRule(CreateFirewallRuleDto dto) {
         if (!validateIP(dto.IPAddress())) {
             throw new InvalidIPAddressException();
@@ -31,6 +40,12 @@ public class FirewallService {
         }
     }
 
+    /**
+     * Deletes a firewall rule, thus revoking system entry permission of a specified IP address.
+     * 
+     * @param dto Contains an IP address.
+     * @return HTTP status indicating success or containig a problem that ocurred.
+     */
     public HttpStatus deleteFirewallRule(RemoveFirewallRuleDto dto) {
         if (!validateIP(dto.IPAddress())) {
             throw new InvalidIPAddressException();
@@ -46,6 +61,12 @@ public class FirewallService {
         }
     }
 
+    /**
+     * Checks whether a given IP address is in a valid format.
+     * 
+     * @param ip An IP address.
+     * @return Whether a given IP address is valid or not.
+     */
     private boolean validateIP(String ip) {
         if (StringUtils.isEmpty(ip)) {
             throw new BaseBadRequestException("IP Address cannot be empty");

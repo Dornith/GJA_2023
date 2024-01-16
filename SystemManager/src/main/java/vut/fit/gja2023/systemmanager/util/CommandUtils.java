@@ -35,11 +35,11 @@ public class CommandUtils {
     public static final String ETC_HOSTS_ALLOW = "/etc/hosts.allow";
 
     /**
-     * Get information about group
+     * Get information about a group.
      *
-     * @param groupName name of the group to be found
-     * @return pair where left value is {@link ExitCodeEnum} representing the group information finding process result
-     * and right value is the command output if the command was successful or null if not
+     * @param groupName The name of the group to be found.
+     * @return A Pair where the left value is {@link ExitCodeEnum} representing the group information finding process result
+     * and the right value is the command output if the command was successful or null if it was not.
      */
     public static Pair<ExitCodeEnum, String> getGroup(@NonNull String groupName) {
         ProcessBuilder builder = new ProcessBuilder();
@@ -71,9 +71,9 @@ public class CommandUtils {
 
 
     /**
-     * Create user on system
+     * Create user in OS.
      *
-     * @param name name of user to be created
+     * @param name The name of the user to be created.
      * @return {@link ExitCodeEnum} representing the user creation process result
      */
     public static ExitCodeEnum createNewUser(@NonNull String name, String password) {
@@ -106,10 +106,10 @@ public class CommandUtils {
     }
 
     /**
-     * Deletes user from system
+     * Deletes a user from the system.
      *
-     * @param name name of user to be deleted
-     * @return {@link ExitCodeEnum} representing the deletion process result
+     * @param name The name of the user to be deleted.
+     * @return {@link ExitCodeEnum} representing the deletion process result.
      */
     public static ExitCodeEnum deleteUser(@NonNull String name) {
         ProcessBuilder builder = new ProcessBuilder();
@@ -137,10 +137,10 @@ public class CommandUtils {
     }
 
     /**
-     * Creates group on system
+     * Creates a group on the system.
      *
-     * @param name name of group to be created
-     * @return {@link ExitCodeEnum} representing the group creation process result
+     * @param name The name of the group to be created.
+     * @return {@link ExitCodeEnum} representing the group creation process result.
      */
     public static ExitCodeEnum createNewGroup(@NonNull String name) {
         ProcessBuilder builder = new ProcessBuilder();
@@ -168,10 +168,10 @@ public class CommandUtils {
     }
 
     /**
-     * Deletes group from system
+     * Deletes a group from the system.
      *
-     * @param name name of group to be deleted
-     * @return {@link ExitCodeEnum} representing the deletion process result
+     * @param name The name of the group to be deleted.
+     * @return {@link ExitCodeEnum} representing the deletion process result.
      */
     public static ExitCodeEnum deleteGroup(@NonNull String name) {
         ProcessBuilder builder = new ProcessBuilder();
@@ -199,10 +199,10 @@ public class CommandUtils {
     }
 
     /**
-     * Adds user to group
+     * Adds a specified user to a given group.
      *
-     * @param dto {@link AddUserToGroupDto} containing user and group names
-     * @return {@link ExitCodeEnum} representing the addition process result
+     * @param dto {@link AddUserToGroupDto} containing the user and the group names.
+     * @return {@link ExitCodeEnum} representing the addition process result.
      */
     public static ExitCodeEnum addUserToGroup(@NonNull AddUserToGroupDto dto) {
         ProcessBuilder builder = new ProcessBuilder();
@@ -230,10 +230,10 @@ public class CommandUtils {
     }
 
     /**
-     * Removes user from group
+     * Removes a specified user from a given group.
      *
-     * @param dto {@link RemoveUserFromGroupDto} containing user and group names
-     * @return {@link ExitCodeEnum} representing the removal process result
+     * @param dto {@link RemoveUserFromGroupDto} containing the user and the group names.
+     * @return {@link ExitCodeEnum} representing the removal process result.
      */
     public static ExitCodeEnum removeUserFromGroup(@NonNull RemoveUserFromGroupDto dto) {
         ProcessBuilder builder = new ProcessBuilder();
@@ -261,10 +261,10 @@ public class CommandUtils {
     }
 
     /**
-     * Checks if user exists
+     * Checks whether a specified user exists or not.
      *
-     * @param name name of user to be checked
-     * @return true if user exists, false otherwise
+     * @param name The name of the user to be checked.
+     * @return true if user exists, false otherwise.
      */
     public static boolean existsUser(@NonNull String name) {
         ProcessBuilder builder = new ProcessBuilder();
@@ -274,10 +274,10 @@ public class CommandUtils {
     }
 
     /**
-     * Checks if group exists
+     * Checks whether a specified group exists or not.
      *
-     * @param name name of group to be checked
-     * @return true if group exists, false otherwise
+     * @param name The name of the group to be checked.
+     * @return true if group exists, false otherwise.
      */
     public static boolean existsGroup(@NonNull String name) {
         ProcessBuilder builder = new ProcessBuilder();
@@ -287,12 +287,12 @@ public class CommandUtils {
     }
 
     /**
-     * Checks if directory exists
+     * Creates a new directory with a given path.
      *
-     * @param path           path to directory to be checked
-     * @param mode           mode representing rights of access to owner/group/others -optional
-     * @param ownerGroupName name of group to be set as owner -optional
-     * @return {@link ExitCodeEnum} representing the directory creation process result
+     * @param path The path to the directory to be created.
+     * @param mode A mode representing rights of access of owner/group/others. -optional
+     * @param ownerGroupName The name of the group to be set as the owner. -optional
+     * @return {@link ExitCodeEnum} representing the directory creation process result.
      */
     public static ExitCodeEnum createNewDirectory(@NonNull String path, DirectoryModeEnum mode, String ownerGroupName) {
         if (checkIfFileExistsOnPath(path)) {
@@ -341,10 +341,10 @@ public class CommandUtils {
     }
 
     /**
-     * Deletes directory
+     * Deletes a specified directory.
      *
-     * @param path path to directory to be deleted
-     * @return {@link ExitCodeEnum} representing the removal process result
+     * @param path The path to the directory to be deleted.
+     * @return {@link ExitCodeEnum} representing the removal process result.
      */
     public static ExitCodeEnum deleteDirectory(@NonNull String path) {
         if (!checkIfDirExistsOnPath(path)) {
@@ -361,11 +361,11 @@ public class CommandUtils {
     }
 
     /**
-     * Changes directory group
+     * Changes which group a specified directory belongs to.
      *
-     * @param path      path to directory to be changed
-     * @param groupName name of group to be set
-     * @return {@link ExitCodeEnum} representing the removal process result
+     * @param path The path to the directory to be changed.
+     * @param groupName The name of the group to be set as the new owner.
+     * @return {@link ExitCodeEnum} representing the removal process result.
      */
     public static ExitCodeEnum changeDirGroup(@NonNull String path, @NonNull String groupName) {
         ProcessBuilder builder = new ProcessBuilder();
@@ -378,6 +378,12 @@ public class CommandUtils {
         }
     }
 
+    /**
+     * Creates a new hosts file rule.
+     * 
+     * @param IPAddress An IP address to be included in the hosts file.
+     * @return The result of adding a new rule.
+     */
     public static ExitCodeEnum createHostsFileRule(@NonNull String IPAddress) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(ETC_HOSTS_ALLOW, true))) {
             writer.println("sshd: " + IPAddress + "# " + "Created by system manager");
@@ -388,6 +394,12 @@ public class CommandUtils {
         }
     }
 
+    /**
+     * Removes a specified hosts file rule.
+     * 
+     * @param IPAddress An IP address to be removed from the hosts file.
+     * @return The result of removing a hosts file rule.
+     */
     public static ExitCodeEnum removeHostsFileRule(@NonNull String IPAddress) {
         boolean found = false;
         try (BufferedReader reader = new BufferedReader(new FileReader(ETC_HOSTS_ALLOW));
@@ -428,6 +440,12 @@ public class CommandUtils {
         }
     }
 
+    /**
+     * Checks whether a file exists on a given path.
+     * 
+     * @param path The path to be checked.
+     * @return true if a file exists on the specified path, false otherwise.
+     */
     private static boolean checkIfFileExistsOnPath(String path) {
         ProcessBuilder builder = new ProcessBuilder();
         builder.command("test", "-e", path);
@@ -435,6 +453,12 @@ public class CommandUtils {
         return checkSuccess(builder);
     }
 
+    /**
+     * Checks whether a directory exists on a given path.
+     * 
+     * @param path The path to be checked.
+     * @return true if a directory exists on the specified path, false otherwise.
+     */
     private static boolean checkIfDirExistsOnPath(String path) {
         ProcessBuilder builder = new ProcessBuilder();
         builder.command("test", "-d", path);

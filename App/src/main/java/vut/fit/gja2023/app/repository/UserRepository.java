@@ -9,6 +9,9 @@ import vut.fit.gja2023.app.entity.UserBo;
 
 import java.util.Optional;
 
+/**
+ * A repository used for saving/retrieving users from the database.
+ */
 @Repository
 public interface UserRepository extends JpaRepository<UserBo, Long> {
 

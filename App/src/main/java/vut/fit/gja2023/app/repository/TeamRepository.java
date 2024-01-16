@@ -8,6 +8,9 @@ import vut.fit.gja2023.app.entity.TeamBo;
 
 import java.util.Optional;
 
+/**
+ * A repository used for saving/retrieving teams from the database.
+ */
 @Repository
 public interface TeamRepository extends JpaRepository<TeamBo, Long> {
     @Query("SELECT t FROM TeamBo t WHERE t.name = :teamName")

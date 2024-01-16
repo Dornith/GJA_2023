@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * A business object representing a firewall rule.
+ */
 @Entity
 @Data
 @Table(name = "firewall_rule")

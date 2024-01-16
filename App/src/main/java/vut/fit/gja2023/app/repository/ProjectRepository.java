@@ -9,6 +9,9 @@ import vut.fit.gja2023.app.entity.UserBo;
 
 import java.util.List;
 
+/**
+ * A repository used for saving/retrieving projects from the database.
+ */
 @Repository
 public interface ProjectRepository extends JpaRepository<ProjectBo, Long> {
 }

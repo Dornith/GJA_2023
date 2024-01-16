@@ -3,6 +3,9 @@ package vut.fit.gja2023.app.util;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * A class for configuring \ref %CsvReaderService.
+ */
 @Data
 @RequiredArgsConstructor
 public class CsvReaderConfig {
