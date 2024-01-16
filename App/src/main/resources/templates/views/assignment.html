@@ -1,0 +1,34 @@
+<main class="p-2">
+    <h2 th:text="${assignment.title}"></h2>
+    <div th:text="${assignment.description}"></div>
+    <div>Deadline: <span th:text="${assignment.deadline}"></span></div>
+    <div class="badge bg-secondary" th:if="${assignment.team}">Team Project</div>
+
+    <div class="p-1 my-2">
+        <a class="btn btn-secondary" th:href="@{'/courses/' + ${course.id}}">Back to Course Detail</a>
+        <a class="btn btn-secondary" href="/courses">Back to Courses</a>
+    </div>
+
+    <h4>Projects</h4>
+    <div th:each="project : ${assignment.projects}" class="p-2 m-1">
+        <div th:if="${assignment.team}">
+            <div class="badge bg-success" th:if="${project.submitted}">Submitted</div>
+            <div class="badge bg-warning" th:else>Not Submitted</div>
+
+            <b>Team: </b>
+            <div th:each="member : ${project.members}">
+                <span th:text="${member.name}"></span>
+                <span>(<span th:text="${member.login}"></span>)</span>
+            </div>
+        </div>
+        <div th:else>
+            <div>
+                Project by <span th:text="${project.author.name}"></span>
+                <span>(<span th:text="${project.author.login}"></span>)</span>
+            </div>
+
+            <div class="badge bg-success" th:if="${project.submitted}">Submitted</div>
+            <div class="badge bg-warning" th:else>Not Submitted</div>
+        </div>
+    </div>
+</main>

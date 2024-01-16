@@ -19,11 +19,16 @@
     </div>
 
     <h4>Assignments</h4>
-    <div th:each="ass : ${course.projectAssignments}" class="p-1">
-        <div th:text="${ass.title}"></div>
-        <div th:text="${ass.description}"></div>
-        <div th:text="${ass.deadline}"></div>
-        <div th:text="${ass.team}"></div>
-        <a class="btn btn-danger" th:href="@{'/courses/' + ${course.id} + '/assignments/delete'}">Delete</a>
+    <div th:each="ass : ${course.projectAssignments}" class="p-2 m-1 d-flex flex-row w-100 border border-dark">
+        <div class="flex-fill">
+            <a th:href="@{'/courses/' + ${course.id} + '/assignments/' + ${ass.id}}"><h5 class="" th:text="${ass.title}"></h5></a>
+            <div class="" th:text="${ass.description}"></div>
+            <div>Deadline: <span th:text="${ass.deadline}"></span></div>
+            <div class="badge bg-secondary" th:if="${ass.team}">Team Project</div>
+        </div>
+        <form method="post" th:action="@{'/courses/' + ${course.id} + '/assignments/' + ${ass.id} + '/delete'}">
+            <input class="btn btn-danger" type="submit" value="Delete">
+        </form>
     </div>
 </main>
+

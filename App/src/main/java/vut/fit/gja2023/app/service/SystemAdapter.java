@@ -66,4 +66,9 @@ public class SystemAdapter {
         team.getProjects().forEach(this::deleteProject);
         systemManager.deleteGroup(team.getGroupName());
     }
+
+    public void deleteAssignment(@NotNull ProjectAssignmentBo assignment) {
+        var path = getAssignmentPath(assignment);
+        systemManager.deleteDirectory(path);
+    }
 }

@@ -143,4 +143,10 @@ public class CourseService {
             course.getStudents().forEach(student -> projectService.createProject(student, assignment));
         }
     }
+
+    public void removeAssignmentFromCourse(@NotNull CourseBo course, @NotNull ProjectAssignmentBo assignment) {
+        assignment.getProjects().forEach(projectService::removeProject);
+        systemAdapter.deleteAssignment(assignment);
+        assignmentRepository.delete(assignment);
+    }
 }
