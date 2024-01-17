@@ -28,13 +28,13 @@ public class OSNameParser {
      * @return Parsed name usable in linux with trimmed length.
      */
     public static String toOS(String nonOS, int maxLength) {
-        String newName = nonOS.replaceAll(REGEX_FORBIDDEN_SYMBOLS, "");
-        String uid = java.util.UUID.randomUUID().toString();
+        String uuid = java.util.UUID.randomUUID().toString();
+        String newName = nonOS.replaceAll(REGEX_FORBIDDEN_SYMBOLS, "") + uuid;
 
         if (newName.length() > maxLength) {
             newName = newName.substring(0, maxLength);
         }
         
-        return newName + uid;
+        return newName;
     }
 }

@@ -41,12 +41,7 @@ public class UserBo {
     @Column(name = "role", nullable = false)
     private UserRole role;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(
-        name = "user_team",
-        joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id")
-    )
+    @ManyToMany(mappedBy = "members", cascade = CascadeType.PERSIST)
     private List<TeamBo> teams;
 
     @ManyToMany

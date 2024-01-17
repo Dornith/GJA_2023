@@ -273,19 +273,32 @@ public class CourseController {
         model.setTargetView(View.ASSIGNMENT);
         return Layout.DEFAULT.getValue();
     }
-    
+
+    @GetMapping("/{courseId}/teams")
+    public String getTeams(Model model, @PathVariable long courseId) {
+        var course = courseRepository.findById(courseId);
+        if (course.isEmpty()) {
+            model.setErrorView("404", "Course doesn't exist.");
+            return Layout.DEFAULT.getValue();
+        }
+
+        model.addAttribute("course", course.get());
+        model.setTargetView(View.COURSE_TEAMS);
+        return Layout.DEFAULT.getValue();
+    }
+
     @GetMapping("/{courseId}/teams/upload")
     public String uploadTeams(Model model, @PathVariable long courseId) {
         var course = courseRepository.findById(courseId);
         if (course.isEmpty()) {
             model.setErrorView("404", "Course doesn't exist.");
-            return Layout.DEFAULT.toString();
+            return Layout.DEFAULT.getValue();
         }
 
         model.addAttribute("course", course.get());
         model.setCsvColumns(teamsCsvColumns);
         model.setTargetView(View.UPLOAD_TEAMS);
-        return Layout.DEFAULT.toString();
+        return Layout.DEFAULT.getValue();
     }
 
     @PostMapping("/{courseId}/teams/upload")
@@ -301,15 +314,15 @@ public class CourseController {
         var course = courseRepository.findById(courseId);
         if (course.isEmpty()) {
             model.setErrorView("404", "Course doesn't exist.");
-            return Layout.DEFAULT.toString();
+            return Layout.DEFAULT.getValue();
         }
 
         if (csvFile.isEmpty() || separator.length() != 1) {
             model.setErrorView("401", "Bad request.");
-            return Layout.DEFAULT.toString();
+            return Layout.DEFAULT.getValue();
         }
 
-        CsvReaderConfig config = new CsvReaderConfig(new int[]{ login - 1, teamName - 1 }, hasHeader, separator.charAt(0));
+        CsvReaderConfig config = new CsvReaderConfig(new int[]{ teamName - 1, login - 1 }, hasHeader, separator.charAt(0));
         Map<String, List<String>> studentsTeams = teamsCsvParser.parse(csvFile, config);
         courseService.upsertTeams(course.get(), studentsTeams);
 

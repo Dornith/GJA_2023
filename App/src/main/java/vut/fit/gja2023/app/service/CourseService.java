@@ -140,8 +140,8 @@ public class CourseService {
             if (newTeam.getMembers().isEmpty()) {
                 teamRepository.delete(newTeam);
             } else {
-                createTeamProjectsForAllCourseAssignment(newTeam, course);
                 teamRepository.save(newTeam);
+                createTeamProjectsForAllCourseAssignment(newTeam, course);
             }
         });
     }
@@ -152,15 +152,11 @@ public class CourseService {
     }
     
     private void addTeamToStudent(UserBo student, TeamBo team) {
-        List<TeamBo> teams = student.getTeams();
-        teams.add(team);
-        student.setTeams(teams);
+        student.getTeams().add(team);
     }
     
     private void addStudentToTeam(TeamBo team, UserBo student) {
-        List<UserBo> members = team.getMembers();
-        members.add(student);
-        team.setMembers(members);
+        team.getMembers().add(student);
         
         systemManager.addUserToGroup(student.getLogin(), team.getGroupName());
     }
@@ -168,7 +164,7 @@ public class CourseService {
     private void createTeamProjectsForAllCourseAssignment(TeamBo team, CourseBo course) {
         List<ProjectAssignmentBo> teamCourseAssignments = course.getProjectAssignments().stream()
                 .filter(assignment -> assignment.isTeam())
-                .collect(Collectors.toList());
+                .toList();
         
         teamCourseAssignments.forEach(assignment -> {
             projectService.createTeamProject(team, assignment);

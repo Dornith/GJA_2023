@@ -33,7 +33,12 @@ public class TeamBo {
     @Column(name = "group_name", nullable = false, length = GROUP_NAME_MAX_LENGTH)
     private String groupName;
 
-    @ManyToMany(mappedBy = "teams", cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "team_user",
+            joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
+    )
     private List<UserBo> members;
 
     @ManyToOne

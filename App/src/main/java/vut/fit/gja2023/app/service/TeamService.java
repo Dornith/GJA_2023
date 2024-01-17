@@ -9,6 +9,8 @@ import vut.fit.gja2023.app.entity.UserBo;
 import vut.fit.gja2023.app.repository.TeamRepository;
 import vut.fit.gja2023.app.util.OSNameParser;
 
+import java.util.ArrayList;
+
 /**
  * A service for working with teams.
  */
@@ -73,11 +75,11 @@ public class TeamService {
     public TeamBo generateNewTeam(String name, CourseBo course) {
         TeamBo newTeam = new TeamBo();
         newTeam.setName(name);
-        newTeam.setGroupName(OSNameParser.toOS(name));
+        newTeam.setGroupName(OSNameParser.toOS(name, GROUP_NAME_MAX_LENGTH));
         newTeam.setCourse(course);
-
+        newTeam.setMembers(new ArrayList<>());
+        teamRepository.save(newTeam);
         systemManager.createGroup(newTeam.getGroupName());
-        
         return newTeam;
     }
 }

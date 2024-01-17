@@ -15,7 +15,8 @@ public enum View {
     COURSE_STUDENTS("views/course_students"),
     CREATE_ASSIGNMENT("views/course_create_assignment"),
     ASSIGNMENT("views/assignment"),
-    LOGIN("views/login");
+    LOGIN("views/login"),
+    COURSE_TEAMS("views/course_teams");
 
     public final String value;
 }
