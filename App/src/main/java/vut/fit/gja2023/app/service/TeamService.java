@@ -3,10 +3,13 @@ package vut.fit.gja2023.app.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import vut.fit.gja2023.app.entity.CourseBo;
 import vut.fit.gja2023.app.entity.TeamBo;
 import vut.fit.gja2023.app.entity.UserBo;
 import vut.fit.gja2023.app.repository.TeamRepository;
 import vut.fit.gja2023.app.util.OSNameParser;
+
+import java.util.ArrayList;
 
 /**
  * A service for working with teams.
@@ -14,6 +17,8 @@ import vut.fit.gja2023.app.util.OSNameParser;
 @Service
 @RequiredArgsConstructor
 public class TeamService {
+    private static final int GROUP_NAME_MAX_LENGTH = 32;
+    
     private final TeamRepository teamRepository;
     private final SystemAdapter systemAdapter;
     private final SystemManagerService systemManager;
@@ -48,7 +53,7 @@ public class TeamService {
      * @return A new group name.
      */
     private String convertNameToGroupId(String name) {
-        return OSNameParser.toOS(name);
+        return OSNameParser.toOS(name, GROUP_NAME_MAX_LENGTH);
     }
 
     public void deleteTeam(TeamBo team) {
@@ -65,5 +70,16 @@ public class TeamService {
             teamRepository.save(team);
             systemManager.removeUserFromGroup(student.getLogin(), team.getGroupName());
         }
+    }
+    
+    public TeamBo generateNewTeam(String name, CourseBo course) {
+        TeamBo newTeam = new TeamBo();
+        newTeam.setName(name);
+        newTeam.setGroupName(OSNameParser.toOS(name, GROUP_NAME_MAX_LENGTH));
+        newTeam.setCourse(course);
+        newTeam.setMembers(new ArrayList<>());
+        teamRepository.save(newTeam);
+        systemManager.createGroup(newTeam.getGroupName());
+        return newTeam;
     }
 }

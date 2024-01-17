@@ -18,4 +18,23 @@ public class OSNameParser {
 
         return newName + uid;
     }
+    
+    /**
+     * Parses a given name to a format usable for naming in linux.
+     * The new name is also trimmed to a specified length.
+     * 
+     * @param nonOS The name to be parsed.
+     * @param maxLength The maximum length of the new name.
+     * @return Parsed name usable in linux with trimmed length.
+     */
+    public static String toOS(String nonOS, int maxLength) {
+        String uuid = java.util.UUID.randomUUID().toString();
+        String newName = nonOS.replaceAll(REGEX_FORBIDDEN_SYMBOLS, "") + uuid;
+
+        if (newName.length() > maxLength) {
+            newName = newName.substring(0, maxLength);
+        }
+        
+        return newName;
+    }
 }

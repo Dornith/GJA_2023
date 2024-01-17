@@ -1,0 +1,17 @@
+<main class="p-2">
+    <h2 th:text="${course.name}"></h2>
+    <div>
+        <a class="btn btn-warning" th:href="@{'/courses/' + ${course.id} + '/teams/upload'}">Upload Teams</a>
+        <a class="btn btn-secondary" th:href="@{'/courses/' + ${course.id}}">Back to Course Detail</a>
+        <a class="btn btn-secondary" href="/courses">Back to Courses</a>
+    </div>
+
+    <h4>Teams</h4>
+    <div th:each="team : ${course.teams}" class="p-1">
+        <div>Team</div>
+        <div th:each="member : ${team.members}" class="p-1">
+            <span th:text="${member.login}"></span>
+            <span th:text="${member.name}"></span>
+        </div>
+    </div>
+</main>

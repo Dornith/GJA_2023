@@ -2,6 +2,7 @@ package vut.fit.gja2023.app.service;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vut.fit.gja2023.app.entity.CourseBo;
@@ -15,18 +16,24 @@ import vut.fit.gja2023.app.util.OSNameParser;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import vut.fit.gja2023.app.entity.TeamBo;
+import vut.fit.gja2023.app.repository.TeamRepository;
 
 @Service
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private final TeamRepository teamRepository;
     private final ProjectAssignmentRepository assignmentRepository;
     private final SystemAdapter systemAdapter;
     private final UserService userService;
     private final TeamService teamService;
     private final ProjectService projectService;
+    private final SystemManagerService systemManager;
 
     private static Predicate<UserBo> isNotIn(List<UserBo> users) {
         return uA -> users.stream().noneMatch(uB -> uB.getLogin().equals(uA.getLogin()));
@@ -109,6 +116,59 @@ public class CourseService {
         course.getProjectAssignments().stream()
             .filter(assignment -> !assignment.isTeam())
             .forEach(assignment -> projectService.createProject(student, assignment));
+    }
+    
+    public void upsertTeams(@NotNull CourseBo course, @NotNull Map<String, List<String>> teamsStudents) {
+        teamsStudents.forEach((teamName, loginsList) -> {
+            TeamBo newTeam = teamService.generateNewTeam(teamName, course);
+            
+            List<UserBo> existingStudents = userRepository.findAllByLogins(loginsList);
+            
+            loginsList.forEach(login -> {
+                UserBo existingStudent = existingStudents.stream()
+                    .filter(student -> login.matches(student.getLogin()))
+                    .findFirst()
+                    .orElse(null);
+
+                //student already exists
+                if (existingStudent != null && course.getStudents().contains(existingStudent) && !IsInATeamInCourse(existingStudent, course)) {
+                    addTeamToStudent(existingStudent, newTeam);
+                    addStudentToTeam(newTeam, existingStudent);
+                }
+            });
+
+            if (newTeam.getMembers().isEmpty()) {
+                teamRepository.delete(newTeam);
+            } else {
+                teamRepository.save(newTeam);
+                createTeamProjectsForAllCourseAssignment(newTeam, course);
+            }
+        });
+    }
+    
+    private boolean IsInATeamInCourse(UserBo student, CourseBo course) {
+        return course.getTeams().stream()
+                .anyMatch(team -> team.getMembers().contains(student));
+    }
+    
+    private void addTeamToStudent(UserBo student, TeamBo team) {
+        student.getTeams().add(team);
+    }
+    
+    private void addStudentToTeam(TeamBo team, UserBo student) {
+        team.getMembers().add(student);
+        
+        systemManager.addUserToGroup(student.getLogin(), team.getGroupName());
+    }
+    
+    private void createTeamProjectsForAllCourseAssignment(TeamBo team, CourseBo course) {
+        List<ProjectAssignmentBo> teamCourseAssignments = course.getProjectAssignments().stream()
+                .filter(assignment -> assignment.isTeam())
+                .toList();
+        
+        teamCourseAssignments.forEach(assignment -> {
+            projectService.createTeamProject(team, assignment);
+        });
     }
 
     public void addAssignmentToCourse(

@@ -12,16 +12,16 @@
     <h4>Projects</h4>
     <div th:each="project : ${assignment.projects}" class="p-2 m-1">
         <div th:if="${assignment.team}">
-            <div class="badge bg-success" th:if="${project.submitted}">Submitted</div>
-            <div class="badge bg-warning" th:else>Not Submitted</div>
-
-            <b>Team: </b>
-            <div th:each="member : ${project.members}">
+            <div><b>Team project by: </b></div>
+            <div th:each="member : ${project.team.members}">
                 <span th:text="${member.name}"></span>
                 <span>(<span th:text="${member.login}"></span>)</span>
             </div>
+
+            <div class="badge bg-success" th:if="${project.submitted}">Submitted</div>
+            <div class="badge bg-warning" th:else>Not Submitted</div>
         </div>
-        <div th:else>
+        <div th:if="${project.author != null}">
             <div>
                 Project by <span th:text="${project.author.name}"></span>
                 <span>(<span th:text="${project.author.login}"></span>)</span>

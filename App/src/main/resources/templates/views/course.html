@@ -13,7 +13,9 @@
     <div class="p-1">
         <a class="btn btn-primary" th:if="${isTeacherPlus}" th:href="@{'/courses/' + ${course.id} + '/assignments/create'}">Add Assignment</a>
         <a class="btn btn-primary" th:if="${isTeacherPlus}" th:href="@{'/courses/' + ${course.id} + '/students'}">Students</a>
+        <a class="btn btn-primary" th:if="${isTeacherPlus}" th:href="@{'/courses/' + ${course.id} + '/teams'}">Teams</a>
         <a class="btn btn-warning" th:if="${isTeacherPlus}" th:href="@{'/courses/' + ${course.id} + '/students/upload'}">Upload Students</a>
+        <a class="btn btn-warning" th:if="${isTeacherPlus}" th:href="@{'/courses/' + ${course.id} + '/teams/upload'}">Upload Teams</a>
         <a class="btn btn-secondary" href="/courses">Back to Courses</a>
     </div>
 

@@ -6,12 +6,16 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import vut.fit.gja2023.app.enums.UserRole;
 import java.util.List;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * A business object representing a user.
  */
 @Entity
 @Data
+@ToString(exclude = "teams")
+@EqualsAndHashCode(exclude = "teams")
 @Table(name = "user", indexes = {
     @Index(name = "idx_login", columnList = "login")
 })
@@ -37,12 +41,7 @@ public class UserBo {
     @Column(name = "role", nullable = false)
     private UserRole role;
 
-    @ManyToMany
-    @JoinTable(
-        name = "user_team",
-        joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id")
-    )
+    @ManyToMany(mappedBy = "members", cascade = CascadeType.PERSIST)
     private List<TeamBo> teams;
 
     @ManyToMany
