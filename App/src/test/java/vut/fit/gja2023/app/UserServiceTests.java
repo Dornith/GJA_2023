@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import vut.fit.gja2023.app.service.SystemAdapter;
 import vut.fit.gja2023.app.service.SystemManagerService;
 import vut.fit.gja2023.app.service.TeamService;
@@ -37,7 +38,8 @@ public class UserServiceTests {
             mock(TeamService.class),
             userRepository,
             mock(SystemAdapter.class),
-            mock(SystemManagerService.class)
+            mock(SystemManagerService.class),
+            mock(PasswordEncoder.class)
         );
         
         userOne = new UserBo();

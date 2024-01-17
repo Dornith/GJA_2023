@@ -29,18 +29,18 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        seedCourses();
+        prepareData();
     }
 
-    private void seedCourses() {
+    private void prepareData() {
         /*
-        var kenobi = userService.generateUser("xkenob01", "Obi-Wan Kenobi", UserRole.TEACHER);
-        var vader = userService.generateUser("xvader01", "Darth Vader", UserRole.TEACHER);
         var yoda = userService.generateUser("xyodaa01", "Yoda", UserRole.TEACHER);
+        var kenobi = userService.generateUser("xkenob01", "Obi-Wan Kenobi", UserRole.ADMIN);
+        var vader = userService.generateUser("xvader01", "Darth Vader", UserRole.TEACHER);
 
         courseService.createCourse("Introduction to Breathing", "I2B", vader, vader);
         courseService.createCourse("High Ground Fundamentals", "HGF", kenobi, kenobi);
         courseService.createCourse("Backwards Language Understanding","BLU", yoda, yoda);
-        */
+         */
     }
 }

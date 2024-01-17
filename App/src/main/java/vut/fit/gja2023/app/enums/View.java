@@ -1,5 +1,10 @@
-package vut.fit.gja2023.app;
+package vut.fit.gja2023.app.enums;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum View {
     MAIN("views/index"),
     ERROR("views/error"),
@@ -8,16 +13,8 @@ public enum View {
     UPLOAD_STUDENTS("views/course_upload_students"),
     COURSE_STUDENTS("views/course_students"),
     CREATE_ASSIGNMENT("views/course_create_assignment"),
-    ASSIGNMENT("views/assignment");
+    ASSIGNMENT("views/assignment"),
+    LOGIN("views/login");
 
     public final String value;
-
-    private View(String value) {
-        this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
 }

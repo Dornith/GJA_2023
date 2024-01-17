@@ -7,6 +7,9 @@ import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vut.fit.gja2023.app.entity.CourseBo;
 import vut.fit.gja2023.app.entity.UserBo;
@@ -15,6 +18,9 @@ import vut.fit.gja2023.app.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 /**
  * A service for working with users.
  */
@@ -27,6 +33,11 @@ public class UserService {
 
     private final SystemAdapter systemAdapter;
     private final SystemManagerService systemManager;
+    private final PasswordEncoder passwordEncoder;
+
+    private static Predicate<CourseBo> isNotIn(List<CourseBo> courses) {
+        return cA -> courses.stream().noneMatch(cB -> cB.getId().equals(cA.getId()));
+    }
 
     /**
      * Saves a new user to the database.
@@ -85,10 +96,16 @@ public class UserService {
     }
 
     public UserBo generateUser(@NotNull String login, @NotNull String name, @NotNull UserRole role) {
+        var password = "alohomora";
+        //TODO
+        // - generate password
+        // - send email
+
         var user = new UserBo();
         user.setLogin(login);
         user.setName(name);
         user.setRole(role);
+        user.setPassword(passwordEncoder.encode(password));
         user.setStudiedCourses(new ArrayList<>());
         user.setCoordinatedCourses(new ArrayList<>());
         user.setGuaranteedCourses(new ArrayList<>());
@@ -96,12 +113,37 @@ public class UserService {
         user.setProjects(new ArrayList<>());
         userRepository.save(user);
 
-        var password = "alohomora";
-        //TODO
-        // - generate password
-        // - send email
-
         systemManager.createUser(user.getLogin(), password);
         return user;
+    }
+
+    public Optional<UserBo> getLoggedInUser() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            var principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails) {
+                return userRepository.findByUserLogin(((UserDetails)principal).getUsername());
+            }
+        }
+        return Optional.empty();
+    }
+
+    public List<CourseBo> getTeachingCourses(UserBo teacher) {
+        var guaranteed = teacher.getGuaranteedCourses();
+        var coordinated = teacher.getCoordinatedCourses();
+
+        return Stream.concat(
+            guaranteed.stream(),
+            coordinated.stream().filter(isNotIn(guaranteed))
+        ).toList();
+    }
+
+    public boolean isLoggedIn() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            var principal = authentication.getPrincipal();
+            return principal instanceof UserDetails;
+        }
+        return false;
     }
 }

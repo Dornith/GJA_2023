@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import vut.fit.gja2023.app.enums.UserRole;
-
 import java.util.List;
 
 /**
@@ -31,6 +30,9 @@ public class UserBo {
     @Pattern(regexp = LOGIN_REGEX, message = "Invalid login format")
     @Column(name = "login", nullable = false, length = 8)
     private String login;
+
+    @Column(name = "password", nullable = false)
+    private String password;
 
     @Column(name = "role", nullable = false)
     private UserRole role;

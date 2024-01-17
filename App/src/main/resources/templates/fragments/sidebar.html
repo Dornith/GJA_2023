@@ -4,21 +4,24 @@
     </div>
 
     <section class="d-flex flex-column p-1 align-items-center">
-        <div class="d-flex flex-column align-items-center pb-2">
-            <span class="font-weight-bold">User Name</span>
-            <span>@xlogin01</span>
-            <span>student/teacher/admin</span>
+        <div th:if="${isLoggedIn}" class="d-flex flex-column align-items-center pb-2">
+            <span class="font-weight-bold" th:text="${loggedInUser.name}"></span>
+            <span th:text="${loggedInUser.login}"></span>
+            <span th:text="${loggedInUser.role}"></span>
         </div>
-        <a href="/logout">Logout</a>
+        <form action="/perform-logout" method="get">
+            <input type="submit" class="btn btn-outline-primary" value="Logout">
+        </form>
     </section>
 
     <hr class="border border-white m-2">
 
     <nav class="d-flex flex-column gap-1 p-4 flex-fill">
         <span class="font-weight-bold text-center pb-2">Menu</span>
+        <span><a href="/" class="text-white">Home</a></span>
         <span><a href="/courses" class="text-white">Courses</a></span>
-        <span><a href="/teams" class="text-white">Teams</a></span>
-        <span><a href="/projects" class="text-white">Projects</a></span>
+        <span th:if="${isStudent}"><a href="/teams" class="text-white">Teams</a></span>
+        <span th:if="${isStudent}"><a href="/projects" class="text-white">Projects</a></span>
         <span><a href="/firewall" class="text-white">Firewall Rules</a></span>
     </nav>
 

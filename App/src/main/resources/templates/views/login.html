@@ -1,0 +1,18 @@
+<main class="p-2">
+    <div class="card p-2">
+        <h1>LogIn</h1>
+        <div th:if="${param.error}">Invalid username and password.</div>
+        <div th:if="${param.logout}">You have been logged out.</div>
+        <form th:action="@{/login}" method="post" style="width: 600px">
+            <div class="input-group m-1">
+                <label class="input-group-text w-25" for="username">Login</label>
+                <input class="form-control" type="text" id="username" name="username" required>
+            </div>
+            <div class="input-group m-1">
+                <label class="input-group-text w-25" for="password">Password</label>
+                <input class="form-control" type="password" id="password" name="password" required>
+            </div>
+            <input type="submit" class="btn btn-primary" value="LogIn">
+        </form>
+    </div>
+</main>
