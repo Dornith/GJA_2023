@@ -5,12 +5,16 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.List;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * A business object representing a team.
  */
 @Entity
 @Data
+@ToString(exclude = "members")
+@EqualsAndHashCode(exclude = "members")
 @Table(name = "team")
 public class TeamBo {
     public static final int NAME_MAX_LENGTH = 30;
@@ -29,7 +33,7 @@ public class TeamBo {
     @Column(name = "group_name", nullable = false, length = GROUP_NAME_MAX_LENGTH)
     private String groupName;
 
-    @ManyToMany(mappedBy = "teams")
+    @ManyToMany(mappedBy = "teams", cascade = CascadeType.PERSIST)
     private List<UserBo> members;
 
     @ManyToOne

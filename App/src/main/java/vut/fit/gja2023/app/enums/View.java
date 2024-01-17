@@ -11,6 +11,7 @@ public enum View {
     COURSE("views/course"),
     COURSES("views/courses"),
     UPLOAD_STUDENTS("views/course_upload_students"),
+    UPLOAD_TEAMS("views/course_upload_teams"),
     COURSE_STUDENTS("views/course_students"),
     CREATE_ASSIGNMENT("views/course_create_assignment"),
     ASSIGNMENT("views/assignment"),

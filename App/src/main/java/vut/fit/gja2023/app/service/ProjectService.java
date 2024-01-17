@@ -1,6 +1,5 @@
 package vut.fit.gja2023.app.service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vut.fit.gja2023.app.entity.ProjectAssignmentBo;
