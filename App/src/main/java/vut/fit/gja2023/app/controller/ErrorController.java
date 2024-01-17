@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import vut.fit.gja2023.app.Layout;
+import vut.fit.gja2023.app.enums.Layout;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -15,6 +15,6 @@ public class ErrorController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleException(Exception ex, Model model) {
         model.setErrorView("404", ex.getMessage() + "\n" + ex.getStackTrace().toString());
-        return Layout.EMPTY.toString();
+        return Layout.EMPTY.getValue();
     }
 }

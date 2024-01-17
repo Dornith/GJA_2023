@@ -5,10 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum UserRole {
-    STUDENT("STUDENT"),
-    TEACHER("TEACHER"),
-    ADMIN("ADMIN");
+public enum Layout {
+    DEFAULT("layouts/layout"),
+    EMPTY("layouts/empty");
 
-    private final String value;
+    public final String value;
 }

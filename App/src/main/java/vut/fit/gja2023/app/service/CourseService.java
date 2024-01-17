@@ -28,6 +28,10 @@ public class CourseService {
     private final TeamService teamService;
     private final ProjectService projectService;
 
+    private static Predicate<UserBo> isNotIn(List<UserBo> users) {
+        return uA -> users.stream().noneMatch(uB -> uB.getLogin().equals(uA.getLogin()));
+    }
+
     @Transactional
     public void createCourse(
         @NotNull String name,
@@ -74,10 +78,6 @@ public class CourseService {
         courseStudents.stream()
             .filter(isNotIn(newStudents))
             .forEach(student -> removeStudentFromCourse(course, student));
-    }
-
-    private static Predicate<UserBo> isNotIn(List<UserBo> users) {
-        return uA -> users.stream().noneMatch(uB -> uB.getLogin().equals(uA.getLogin()));
     }
 
     private void removeStudentFromCourse(@NotNull CourseBo course, @NotNull UserBo student) {
